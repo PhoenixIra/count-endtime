@@ -1,0 +1,11 @@
+{
+  "name": "count_endtime",
+  "version": "0.0.1",
+  "description": "A bot to handle with time and countdowns",
+  "main": "bot.js",
+  "author": "Ira Fesefeldt",
+  "dependencies": {
+    "discord.io": "https://github.com/woor/discord.io/tarball/gateway_v6",
+    "winston": "^3.3.3"
+  }
+}
