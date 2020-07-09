@@ -62,6 +62,11 @@ function onMessage(message) {
             	printCurrentTime(message.channel,args);
             	break;
 
+            // transforms time into another timezone
+            case 'into-timezone':
+                printTransformTime(message.channel,args);
+                break;
+
                 // save a time in the database
             case 'save':
 
@@ -116,3 +121,14 @@ function printCurrentTime(channel,args){
     channel.send(date.format(form));
 }
 
+function printTransformTime(channel,args){
+    if(args.length < 2){
+        return;
+    }
+    var form = 'LLL';
+    if(args.length > 2){
+        form = args[2];
+    }
+    logger.info('args: '+args[0]+' '+args[1]);
+    channel.send(moment.tz(args[0],args[1]).format(form));
+}
