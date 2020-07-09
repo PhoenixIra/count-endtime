@@ -48,6 +48,10 @@ function onMessage(message) {
         var args = text.substring(1).split(' ');
         var cmd = args[0];
         args = args.splice(1);
+        
+        logger.info('locale: '+message.author.locale);
+        
+        moment.locale(message.author.locale);
 	
         switch (cmd) {
             //sets the language for this server
@@ -56,6 +60,7 @@ function onMessage(message) {
             // outputs into the chat the current ime
             case 'time':
             	printCurrentTime(message.channel,args);
+            	break;
 
                 // save a time in the database
             case 'save':
@@ -71,6 +76,13 @@ function onMessage(message) {
 
                 // give a countdown to a saved time into the chat title
             case 'countdownTitle':
+            
+            case 'is-Ira-a-Warlock?':
+            	message.channel.send('Yes.');
+            	break;
+            
+            default:
+            	message.channel.send('No.');
 
 
                 break;
@@ -82,18 +94,25 @@ function onMessage(message) {
 
 function printCurrentTime(channel,args){
     var timezone = '';
+    var form = 'LLL';
     if(args.length > 0){
     	timezone = args[0];
     }
+    if(args.length > 1){
+    	form = args[1];
+    }
+    
     var date;
     if(timezoneAbbr.has(timezone)){
         var offset = timezoneAbbr.get(timezone);
         date = moment().utcOffset(offset*60);
-    } else if(parseInt(timezone)!=NaN){
+    } else if(!isNaN(parseInt(timezone))){
     	date = moment().utcOffset(parseInt(timezone))
     } else {
     	date = moment.tz(timezone);
     }
-    channel.send(date.format());
+   
+    
+    channel.send(date.format(form));
 }
 
