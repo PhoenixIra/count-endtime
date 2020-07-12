@@ -5,6 +5,7 @@
   "main": "bot.js",
   "author": "Ira Fesefeldt",
   "dependencies": {
+    "bot-commander": "^1.1.2",
     "discord.js": "^12.2.0",
     "moment": "^2.27.0",
     "moment-timezone": "^0.5.31",
