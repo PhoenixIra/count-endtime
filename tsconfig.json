@@ -1,0 +1,14 @@
+{
+    "files": [
+        "src/parser/*.ts",
+        "src/commandVisitor.ts",
+        "src/bot.ts"
+    ],
+    "compilerOptions": {
+        "target": "ES6",
+        "module": "commonjs",
+        "noImplicitAny": true,
+        "resolveJsonModule": true,
+        "moduleResolution": "node"
+    }
+}

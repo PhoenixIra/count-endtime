@@ -5,10 +5,30 @@
   "main": "bot.js",
   "author": "Ira Fesefeldt",
   "dependencies": {
-    "bot-commander": "^1.1.2",
+    "antlr4ts": "^0.5.0-alpha.3",
     "discord.js": "^12.2.0",
+    "gulp-cli": "^2.3.0",
+    "gulp-typescript": "^6.0.0-alpha.1",
     "moment": "^2.27.0",
     "moment-timezone": "^0.5.31",
     "winston": "^3.3.3"
-  }
+  },
+  "devDependencies": {
+    "@types/node": "^14.0.23",
+    "@types/ws": "^7.2.6",
+    "antlr4ts-cli": "^0.5.0-alpha.3",
+    "gulp": "^4.0.2",
+    "typescript": "^3.9.6"
+  },
+  "scripts": {
+    "all": "npm run antlr4ts; npm run gulp; npm run test",
+    "gulp": "gulp",
+    "antlr4ts": "cd grammar && antlr4ts -visitor Command.g4 -o ../src/parser",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "gitolite3@feuervogel.me:count-endtime"
+  },
+  "license": "ISC"
 }
