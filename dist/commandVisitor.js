@@ -109,7 +109,7 @@ class StandardCommandVisitor extends AbstractParseTreeVisitor_1.AbstractParseTre
         var outputs = {};
         if (context.output())
             outputs = context.output().accept(this);
-        var format = 'LLL Z';
+        var format = 'LLL';
         if (context.QUOTESTRING())
             format = this.transformToFormat(context.QUOTESTRING().text);
         return Object.assign(Object.assign({}, outputs), { printTitle: format });
