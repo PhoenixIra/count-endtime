@@ -4,7 +4,6 @@ exports.StandardCommandVisitor = exports.CommandType = void 0;
 // import antlr and grammar
 const AbstractParseTreeVisitor_1 = require("antlr4ts/tree/AbstractParseTreeVisitor");
 const logger = require("winston");
-var parseFormat = require('moment-parseformat');
 var CommandType;
 (function (CommandType) {
     CommandType[CommandType["moment"] = 0] = "moment";
@@ -36,35 +35,32 @@ class StandardCommandVisitor extends AbstractParseTreeVisitor_1.AbstractParseTre
     visitMomentLoad(context) {
         return { load: context.STRING().text };
     }
-    //command to input an input
-    visitMomentInput(context) {
-        var command = {};
-        if (context.QUOTESTRING().length >= 2) {
-            command.inputFormat = context.QUOTESTRING(1).text;
-        }
-        else {
-            command.inputFormat = parseFormat(context.QUOTESTRING(0).text);
-        }
+    //command to input a time
+    visitMomentTime(context) {
         if (context.STRING()) {
-            command.inTz = context.STRING().text;
-        }
-        command.input = context.QUOTESTRING(0).text;
-        return command;
-    }
-    //command to input an input without quotemarks
-    visitMomentInputWoQ(context) {
-        var command = {};
-        if (context.QUOTESTRING()) {
-            command.inputFormat = context.QUOTESTRING().text;
+            return { time: context.TIME().text, inTz: context.STRING().text };
         }
         else {
-            command.inputFormat = parseFormat(context.STRING(0).text);
+            return { time: context.TIME().text };
         }
-        if (context.STRING().length >= 2) {
-            command.inTz = context.STRING(1).text;
+    }
+    //command to input a date
+    visitMomentDate(context) {
+        if (context.STRING()) {
+            return { time: context.DATE().text, inTz: context.STRING().text };
         }
-        command.input = context.STRING(0).text;
-        return command;
+        else {
+            return { time: context.DATE().text };
+        }
+    }
+    //command to input a date and time (may still not be a moment because of optional ms)
+    visitMomentDateTime(context) {
+        if (context.STRING()) {
+            return { date: context.DATE().text, time: context.TIME().text, inTz: context.STRING().text };
+        }
+        else {
+            return { date: context.DATE().text, time: context.TIME().text };
+        }
     }
     //option to make a countdown in the title
     visitOutputCountdownTitle(context) {

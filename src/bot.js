@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Discord = require("discord.js");
 const logger = require("winston");
 const moment = require("moment-timezone");
+const moment_parseformat_1 = require("moment-parseformat");
 const auth = require("../json/auth.json");
 const antlr4ts_1 = require("antlr4ts");
 const CommandLexer_js_1 = require("./parser/CommandLexer.js");
@@ -77,11 +78,25 @@ function handleMoment(result, message) {
         else if (result.load) {
             //TODO
         }
-        else if (result.input && result.inTz) {
-            var t = moment.tz(result.input, result.inputFormat, result.inTz);
+        else if (result.time && result.date && result.inTz) {
+            let format = moment_parseformat_1.parseFormat(result.date + ' ' + result.time);
+            var t = moment.tz(result.date + ' ' + result.time, format, result.inTz);
         }
-        else if (result.input) {
-            var t = moment(result.input, result.inputFormat);
+        else if (result.time && result.inTz) {
+            let format = moment_parseformat_1.parseFormat(result.time);
+            var t = moment.tz(result.time, format, result.inTz);
+        }
+        else if (result.date && result.inTz) {
+            var t = moment.tz(result.date, 'D.M.YYYY', result.inTz);
+        }
+        else if (result.time && result.date) {
+            var t = moment(result.date.concat(' ', result.time), 'D.M.YYYY h:m:s:S');
+        }
+        else if (result.time) {
+            var t = moment(result.time, 'h:m:s:S');
+        }
+        else if (result.date) {
+            var t = moment(result.date, 'D.M.YYYY');
         }
         //TODO: change to UTC+ServerConfig Loading
         var timezone = 'Europe/Berlin';

@@ -2,7 +2,8 @@
 import { AbstractParseTreeVisitor } from 'antlr4ts/tree/AbstractParseTreeVisitor'
 import { CommandVisitor } from './parser/CommandVisitor'
 import * as parser from './parser/CommandParser'
-
+import * as logger from 'winston';
+var parseFormat = require('moment-parseformat');
 
 export enum CommandType {moment, server, help}
 
@@ -11,13 +12,15 @@ export interface Command{
     locale?: (string | undefined);
     now?: (boolean | undefined);
     load?: (string | undefined);
-    time?: (string | undefined);
-    date?: (string | undefined);
+    input?: (string | undefined);
+    inputFormat?: (string | undefined);
+    inTz?: (string | undefined);
     countdownTitle?: (string | undefined);
     countdown?: (string | undefined);
     to?: (string | undefined);
     save?: (string | undefined);
     print?: (string | undefined);
+    printTitle?: (string | undefined);
 }
 	
 
@@ -52,19 +55,34 @@ export class StandardCommandVisitor extends AbstractParseTreeVisitor<Command> im
     	return {load: context.STRING().text};
     }
     
-    //command to input a time
-    visitMomentTime(context: parser.MomentTimeContext): Command {
-    	return {time: context.TIME().text};
+    //command to input an input
+    visitMomentInput(context: parser.MomentInputContext): Command {
+    	var command: Command = {};
+    	if(context.QUOTESTRING().length >= 2){
+    		command.inputFormat = context.QUOTESTRING(1).text;
+    	}else{
+    		command.inputFormat = parseFormat(context.QUOTESTRING(0).text);
+    	}
+    	if(context.STRING()){
+    		command.inTz = context.STRING().text;
+    	}
+    	command.input = context.QUOTESTRING(0).text;
+    	return command;    	
     }
     
-    //command to input a date
-    visitMomentDate(context: parser.MomentDateContext): Command {
-    	return {date: context.DATE().text};
-    }
-    
-    //command to input a date and time (may still not be a moment because of optional ms)
-    visitMomentDateTime(context: parser.MomentDateTimeContext): Command {
-    	return {date: context.DATE().text, time: context.TIME().text};
+    //command to input an input without quotemarks
+    visitMomentInputWoQ(context: parser.MomentInputWoQContext): Command {
+    	var command: Command = {};
+    	if(context.QUOTESTRING()){
+    		command.inputFormat = context.QUOTESTRING().text;
+    	}else{
+    		command.inputFormat = parseFormat(context.STRING(0).text);
+    	}
+    	if(context.STRING().length >= 2){
+    		command.inTz = context.STRING(1).text;
+    	}
+    	command.input = context.STRING(0).text;
+    	return command;    	
     }
     
     //option to make a countdown in the title
@@ -99,22 +117,22 @@ export class StandardCommandVisitor extends AbstractParseTreeVisitor<Command> im
     visitOutputPrint(context: parser.OutputPrintContext): Command {
         var outputs: Command = {};
     	if(context.output()) outputs = context.output().accept(this);
-    	var format = 'LLL';
-    	if(context.QUOTESTRING()) format = transformToFormat(context.QUOTESTRING().text);
+    	var format: string = 'LLL Z';
+    	if(context.QUOTESTRING()) format = this.transformToFormat(context.QUOTESTRING().text);
     	return {...outputs, print: format};
     }
     
-    //option to print the date in the chat
+    //option to print the date in the title
     visitOutputPrintTitle(context: parser.OutputPrintContext): Command {
         var outputs: Command = {};
     	if(context.output()) outputs = context.output().accept(this);
-    	var format = 'LLL';
-    	if(context.QUOTESTRING()) format = transformToFormat(context.QUOTESTRING().text);
+    	var format: string = 'LLL Z';
+    	if(context.QUOTESTRING()) format = this.transformToFormat(context.QUOTESTRING().text);
     	return {...outputs, printTitle: format};
     }
     
     //function to transform our format style to moment format style
-    transformToFormat(text: String) {
+    transformToFormat(text: string):string {
         /*
          * 0: Starstate
          * 1: quotemark
@@ -122,15 +140,15 @@ export class StandardCommandVisitor extends AbstractParseTreeVisitor<Command> im
          * 3: text
          * 4: end
          */
-        var state: int = 0;
-        var output: String[] = array();
-        var index: int = 0;
+        var state: number = 0;
+        var output: string[] = [];
+        var index: number = 0;
         for(let c of text){
              switch(state){
                  //start
                  case 0:
                      if(c != '"'){
-                     //TODO: Errorhandling
+                         logger.error("Could not transform text into momentjs format. \" was missing. Text was: '"+text+"'");
                      }
                      state = 1;
                      break;
@@ -140,31 +158,31 @@ export class StandardCommandVisitor extends AbstractParseTreeVisitor<Command> im
                          state = 2;
                      }else{
                          state = 3;
-                         output[i++]='[';
-                         output[i++]=c;
+                         output[index++]='[';
+                         output[index++]=c;
                      }                     
                      break;
                  case 2:
                      if(c == ']'){
                          state = 3;
-                         output[i++]=']';
+                         output[index++]='[';
                      } else if(c == '"'){
                          state = 4;
                      } else {
                          state = 2;
-                         output[i++]=c;
+                         output[index++]=c;
                      }
                      break;
                  case 3:
                      if(c == '['){
                          state = 2;
-                         output[i++]=']';
+                         output[index++]=']';
                      } else if(c == '"'){
                          state = 4;
-                         output[i++]=']';
+                         output[index++]=']';
                      } else {
                          state = 3;
-                         output[i++]=c;
+                         output[index++]=c;
                      }
                      break;
                  case 4:
@@ -172,6 +190,6 @@ export class StandardCommandVisitor extends AbstractParseTreeVisitor<Command> im
                  break;                
             }
         }
-        return output.join();        
+        return output.join('');        
     }
 }

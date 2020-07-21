@@ -10,11 +10,10 @@ server
       ; 
       
 moment
-      : '.now'                     #MomentNow
-      | '.load ' STRING            #MomentLoad
-      | '.time ' TIME              #MomentTime
-      | '.date ' DATE              #MomentDate
-      | '.datetime ' DATE ' ' TIME #MomentDateTime
+      : '.now'                                                       #MomentNow
+      | '.load ' STRING                                              #MomentLoad
+      | '.input ' QUOTESTRING (' in ' STRING)? (' as ' QUOTESTRING)? #MomentInput
+      | '.input ' STRING (' in ' STRING)? (' as ' QUOTESTRING)?      #MomentInputWoQ
       ;
       
 output
@@ -22,12 +21,10 @@ output
       | ' countdown' ('as' STRING)? output?          #OutputCountdown
       | ' to ' STRING output?                        #OutputTo
       | ' save ' STRING output?                      #OutputSave
-      | ' print' (' 'QUOTESTRING)? output?                             #OutputPrint
+      | ' print' (' 'QUOTESTRING)? output?           #OutputPrint
+      | ' print in Title' (' 'QUOTESTRING)? output?  #OutputPrintTitle
       ;
-   
-TIME  : [0-9][0-9]?':'[0-9][0-9]?(':'[0-9][0-9]?(':'[0-9][0-9]?[0-9]?)?)?;
-DATE  : [0-9][0-9]?'.'[0-9][0-9]?('.'[0-9][0-9]([0-9][0-9])?)?;
       
-QUOTESTRING: '"'.*'"';
-STRING: [A-Za-z0-9]+;
+QUOTESTRING: '"'~('"')*'"';
+STRING: [A-Za-z0-9/:.-]+;
 

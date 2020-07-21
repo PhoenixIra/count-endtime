@@ -8,14 +8,14 @@ import { OutputCountdownContext } from "./CommandParser";
 import { OutputToContext } from "./CommandParser";
 import { OutputSaveContext } from "./CommandParser";
 import { OutputPrintContext } from "./CommandParser";
+import { OutputPrintTitleContext } from "./CommandParser";
 import { ServerLocaleContext } from "./CommandParser";
 import { CommandServerContext } from "./CommandParser";
 import { CommandMomentContext } from "./CommandParser";
 import { MomentNowContext } from "./CommandParser";
 import { MomentLoadContext } from "./CommandParser";
-import { MomentTimeContext } from "./CommandParser";
-import { MomentDateContext } from "./CommandParser";
-import { MomentDateTimeContext } from "./CommandParser";
+import { MomentInputContext } from "./CommandParser";
+import { MomentInputWoQContext } from "./CommandParser";
 import { CommandContext } from "./CommandParser";
 import { ServerContext } from "./CommandParser";
 import { MomentContext } from "./CommandParser";
@@ -93,6 +93,19 @@ export interface CommandListener extends ParseTreeListener {
 	exitOutputPrint?: (ctx: OutputPrintContext) => void;
 
 	/**
+	 * Enter a parse tree produced by the `OutputPrintTitle`
+	 * labeled alternative in `CommandParser.output`.
+	 * @param ctx the parse tree
+	 */
+	enterOutputPrintTitle?: (ctx: OutputPrintTitleContext) => void;
+	/**
+	 * Exit a parse tree produced by the `OutputPrintTitle`
+	 * labeled alternative in `CommandParser.output`.
+	 * @param ctx the parse tree
+	 */
+	exitOutputPrintTitle?: (ctx: OutputPrintTitleContext) => void;
+
+	/**
 	 * Enter a parse tree produced by the `ServerLocale`
 	 * labeled alternative in `CommandParser.server`.
 	 * @param ctx the parse tree
@@ -158,43 +171,30 @@ export interface CommandListener extends ParseTreeListener {
 	exitMomentLoad?: (ctx: MomentLoadContext) => void;
 
 	/**
-	 * Enter a parse tree produced by the `MomentTime`
+	 * Enter a parse tree produced by the `MomentInput`
 	 * labeled alternative in `CommandParser.moment`.
 	 * @param ctx the parse tree
 	 */
-	enterMomentTime?: (ctx: MomentTimeContext) => void;
+	enterMomentInput?: (ctx: MomentInputContext) => void;
 	/**
-	 * Exit a parse tree produced by the `MomentTime`
+	 * Exit a parse tree produced by the `MomentInput`
 	 * labeled alternative in `CommandParser.moment`.
 	 * @param ctx the parse tree
 	 */
-	exitMomentTime?: (ctx: MomentTimeContext) => void;
+	exitMomentInput?: (ctx: MomentInputContext) => void;
 
 	/**
-	 * Enter a parse tree produced by the `MomentDate`
+	 * Enter a parse tree produced by the `MomentInputWoQ`
 	 * labeled alternative in `CommandParser.moment`.
 	 * @param ctx the parse tree
 	 */
-	enterMomentDate?: (ctx: MomentDateContext) => void;
+	enterMomentInputWoQ?: (ctx: MomentInputWoQContext) => void;
 	/**
-	 * Exit a parse tree produced by the `MomentDate`
+	 * Exit a parse tree produced by the `MomentInputWoQ`
 	 * labeled alternative in `CommandParser.moment`.
 	 * @param ctx the parse tree
 	 */
-	exitMomentDate?: (ctx: MomentDateContext) => void;
-
-	/**
-	 * Enter a parse tree produced by the `MomentDateTime`
-	 * labeled alternative in `CommandParser.moment`.
-	 * @param ctx the parse tree
-	 */
-	enterMomentDateTime?: (ctx: MomentDateTimeContext) => void;
-	/**
-	 * Exit a parse tree produced by the `MomentDateTime`
-	 * labeled alternative in `CommandParser.moment`.
-	 * @param ctx the parse tree
-	 */
-	exitMomentDateTime?: (ctx: MomentDateTimeContext) => void;
+	exitMomentInputWoQ?: (ctx: MomentInputWoQContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `CommandParser.command`.
