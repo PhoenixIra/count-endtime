@@ -8,14 +8,14 @@ import { OutputCountdownContext } from "./CommandParser";
 import { OutputToContext } from "./CommandParser";
 import { OutputSaveContext } from "./CommandParser";
 import { OutputPrintContext } from "./CommandParser";
+import { OutputPrintTitleContext } from "./CommandParser";
 import { ServerLocaleContext } from "./CommandParser";
 import { CommandServerContext } from "./CommandParser";
 import { CommandMomentContext } from "./CommandParser";
 import { MomentNowContext } from "./CommandParser";
 import { MomentLoadContext } from "./CommandParser";
-import { MomentTimeContext } from "./CommandParser";
-import { MomentDateContext } from "./CommandParser";
-import { MomentDateTimeContext } from "./CommandParser";
+import { MomentInputContext } from "./CommandParser";
+import { MomentInputWoQContext } from "./CommandParser";
 import { CommandContext } from "./CommandParser";
 import { ServerContext } from "./CommandParser";
 import { MomentContext } from "./CommandParser";
@@ -71,6 +71,14 @@ export interface CommandVisitor<Result> extends ParseTreeVisitor<Result> {
 	visitOutputPrint?: (ctx: OutputPrintContext) => Result;
 
 	/**
+	 * Visit a parse tree produced by the `OutputPrintTitle`
+	 * labeled alternative in `CommandParser.output`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitOutputPrintTitle?: (ctx: OutputPrintTitleContext) => Result;
+
+	/**
 	 * Visit a parse tree produced by the `ServerLocale`
 	 * labeled alternative in `CommandParser.server`.
 	 * @param ctx the parse tree
@@ -111,28 +119,20 @@ export interface CommandVisitor<Result> extends ParseTreeVisitor<Result> {
 	visitMomentLoad?: (ctx: MomentLoadContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by the `MomentTime`
+	 * Visit a parse tree produced by the `MomentInput`
 	 * labeled alternative in `CommandParser.moment`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitMomentTime?: (ctx: MomentTimeContext) => Result;
+	visitMomentInput?: (ctx: MomentInputContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by the `MomentDate`
+	 * Visit a parse tree produced by the `MomentInputWoQ`
 	 * labeled alternative in `CommandParser.moment`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitMomentDate?: (ctx: MomentDateContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by the `MomentDateTime`
-	 * labeled alternative in `CommandParser.moment`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitMomentDateTime?: (ctx: MomentDateTimeContext) => Result;
+	visitMomentInputWoQ?: (ctx: MomentInputWoQContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `CommandParser.command`.

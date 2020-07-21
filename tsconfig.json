@@ -1,8 +1,9 @@
 {
-    "files": [
-        "src/parser/*.ts",
+    "Files": [
+        "src/bot.ts",
         "src/commandVisitor.ts",
-        "src/bot.ts"
+        "src/parser/*.ts",
+        "src/@types/*/index.d.ts"
     ],
     "compilerOptions": {
         "target": "ES6",

@@ -10,6 +10,7 @@
     "gulp-cli": "^2.3.0",
     "gulp-typescript": "^6.0.0-alpha.1",
     "moment": "^2.27.0",
+    "moment-parseformat": "^3.0.0",
     "moment-timezone": "^0.5.31",
     "winston": "^3.3.3"
   },
