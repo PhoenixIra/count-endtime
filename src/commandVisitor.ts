@@ -117,7 +117,7 @@ export class StandardCommandVisitor extends AbstractParseTreeVisitor<Command> im
     visitOutputPrint(context: parser.OutputPrintContext): Command {
         var outputs: Command = {};
     	if(context.output()) outputs = context.output().accept(this);
-    	var format: string = 'LLL Z';
+    	var format: string = 'LLL';
     	if(context.QUOTESTRING()) format = this.transformToFormat(context.QUOTESTRING().text);
     	return {...outputs, print: format};
     }
