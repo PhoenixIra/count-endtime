@@ -1,4 +1,3 @@
-
 import * as Discord from 'discord.js';
 import * as logger from 'winston';
 import * as moment from 'moment-timezone';
@@ -7,6 +6,7 @@ import { ANTLRInputStream, CommonTokenStream, BailErrorStrategy } from 'antlr4ts
 import { CommandLexer } from './parser/CommandLexer.js';
 import { CommandParser, CommandContext } from './parser/CommandParser.js';
 import { StandardCommandVisitor, Command, CommandType} from './commandVisitor';
+import { GuildStorage } from './database';
 
 var timezoneAbbr = new Map();
 timezoneAbbr.set('UT','0');
@@ -115,7 +115,7 @@ function handleMoment(result: Command, message: Discord.Message):void{
     }
 }
 
-function getLocale(message: Discord.Message).string{
+function getLocale(message: Discord.Message):string{
     //TODO: ServerConfig
     //TODO: UserConfig
     if(message.author.locale){

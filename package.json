@@ -5,7 +5,9 @@
   "main": "bot.js",
   "author": "Ira Fesefeldt",
   "dependencies": {
+    "@types/better-sqlite3": "^5.4.0",
     "antlr4ts": "^0.5.0-alpha.3",
+    "better-sqlite3": "^7.1.0",
     "discord.js": "^12.2.0",
     "gulp-cli": "^2.3.0",
     "gulp-typescript": "^6.0.0-alpha.1",
@@ -15,11 +17,11 @@
     "winston": "^3.3.3"
   },
   "devDependencies": {
-    "@types/node": "^14.0.23",
+    "@types/node": "^14.0.26",
     "@types/ws": "^7.2.6",
     "antlr4ts-cli": "^0.5.0-alpha.3",
     "gulp": "^4.0.2",
-    "typescript": "^3.9.6"
+    "typescript": "^3.9.7"
   },
   "scripts": {
     "all": "npm run antlr4ts; npm run gulp; npm run test",
