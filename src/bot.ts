@@ -121,6 +121,6 @@ function getLocale(message: Discord.Message).string{
     if(message.author.locale){
         return message.author.locale;
     }
-    return 'de';
+    return 'en';
 }
 
