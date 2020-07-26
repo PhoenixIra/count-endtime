@@ -8,9 +8,6 @@ import { CommandLexer } from './parser/CommandLexer.js';
 import { CommandParser, CommandContext } from './parser/CommandParser.js';
 import { StandardCommandVisitor, Command, CommandType} from './commandVisitor';
 
-//TODO: change to en+server loading
-moment.locale('de');
-
 var timezoneAbbr = new Map();
 timezoneAbbr.set('UT','0');
 timezoneAbbr.set('GMT','0');
@@ -110,11 +107,20 @@ function handleMoment(result: Command, message: Discord.Message):void{
         }
         
         if(result.print){
-            message.channel.send(t.tz(timezone).format(result.print));
+            message.channel.send(t.locale(getLocale(message)).tz(timezone).format(result.print));
         } 
     } catch(error) {
         //TODO: Error handling
         logger.warn(error.message);
     }
+}
+
+function getLocale(message: Discord.Message).string{
+    //TODO: ServerConfig
+    //TODO: UserConfig
+    if(message.author.locale){
+        return message.author.locale;
+    }
+    return 'de';
 }
 
