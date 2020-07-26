@@ -22,7 +22,7 @@ export interface Command{
     print?: (string | undefined);
     printTitle?: (string | undefined);
 }
-	
+    
 
 // Extend the AbstractParseTreeVisitor to get default visitor behaviour
 export class StandardCommandVisitor extends AbstractParseTreeVisitor<Command> implements CommandVisitor<Command> {
@@ -42,93 +42,93 @@ export class StandardCommandVisitor extends AbstractParseTreeVisitor<Command> im
     
     //Command to change the locale of this server
     visitServerLocale(context: parser.ServerLocaleContext): Command {
-    	return {locale: context.STRING().text};
+        return {locale: context.STRING().text};
     }
 
     //Command to generate the current moment
     visitMomentNow(context: parser.MomentNowContext): Command {
-    	return {now: true};
+        return {now: true};
     }
 
     //Command to load some moment
     visitMomentLoad(context: parser.MomentLoadContext): Command {
-    	return {load: context.STRING().text};
+        return {load: context.STRING().text};
     }
     
     //command to input an input
     visitMomentInput(context: parser.MomentInputContext): Command {
-    	var command: Command = {};
-    	if(context.QUOTESTRING().length >= 2){
-    		command.inputFormat = context.QUOTESTRING(1).text;
-    	}else{
-    		command.inputFormat = parseFormat(context.QUOTESTRING(0).text);
-    	}
-    	if(context.STRING()){
-    		command.inTz = context.STRING().text;
-    	}
-    	command.input = context.QUOTESTRING(0).text;
-    	return command;    	
+        var command: Command = {};
+        if(context.QUOTESTRING().length >= 2){
+            command.inputFormat = context.QUOTESTRING(1).text;
+        }else{
+            command.inputFormat = parseFormat(context.QUOTESTRING(0).text);
+        }
+        if(context.STRING()){
+            command.inTz = context.STRING().text;
+        }
+        command.input = context.QUOTESTRING(0).text;
+        return command;        
     }
     
     //command to input an input without quotemarks
     visitMomentInputWoQ(context: parser.MomentInputWoQContext): Command {
-    	var command: Command = {};
-    	if(context.QUOTESTRING()){
-    		command.inputFormat = context.QUOTESTRING().text;
-    	}else{
-    		command.inputFormat = parseFormat(context.STRING(0).text);
-    	}
-    	if(context.STRING().length >= 2){
-    		command.inTz = context.STRING(1).text;
-    	}
-    	command.input = context.STRING(0).text;
-    	return command;    	
+        var command: Command = {};
+        if(context.QUOTESTRING()){
+            command.inputFormat = context.QUOTESTRING().text;
+        }else{
+            command.inputFormat = parseFormat(context.STRING(0).text);
+        }
+        if(context.STRING().length >= 2){
+            command.inTz = context.STRING(1).text;
+        }
+        command.input = context.STRING(0).text;
+        return command;        
     }
     
     //option to make a countdown in the title
     visitOutputCountdownTitle(context: parser.OutputCountdownTitleContext): Command {
         var outputs: Command = {};
-    	if(context.output()) var outputs = context.output().accept(this) 
-    	return {...outputs, countdownTitle: context.STRING().text}
+        if(context.output()) var outputs = context.output().accept(this) 
+        return {...outputs, countdownTitle: context.STRING().text}
     }
     
     //option to make a countdown in the chat
     visitOutputCountdown(context: parser.OutputCountdownContext): Command {
         var outputs: Command = {};
-    	if(context.output()) var outputs = context.output().accept(this) 
-    	return {...outputs, countdown: context.STRING().text}
+        if(context.output()) var outputs = context.output().accept(this) 
+        return {...outputs, countdown: context.STRING().text}
     }
     
     //option to set the timezone
     visitOutputTo(context: parser.OutputToContext): Command {
         var outputs: Command = {};
-    	if(context.output()) var outputs = context.output().accept(this) 
-    	return {...outputs, to: context.STRING().text};
+        if(context.output()) var outputs = context.output().accept(this) 
+        return {...outputs, to: context.STRING().text};
     }
     
     //option to save the moment in the database
     visitOutputSave(context: parser.OutputSaveContext): Command {
-    	var outputs: Command = {};
-    	if(context.output()) var outputs = context.output().accept(this) 
-    	return {...outputs, save: context.STRING().text};
+        var outputs: Command = {};
+        if(context.output()) var outputs = context.output().accept(this) 
+        return {...outputs, save: context.STRING().text};
     }
     
     //option to print the date in the chat
     visitOutputPrint(context: parser.OutputPrintContext): Command {
         var outputs: Command = {};
-    	if(context.output()) outputs = context.output().accept(this);
-    	var format: string = 'LLL';
-    	if(context.QUOTESTRING()) format = this.transformToFormat(context.QUOTESTRING().text);
-    	return {...outputs, print: format};
+        if(context.output()) outputs = context.output().accept(this);
+        var format: string = 'LLL';
+        if(context.QUOTESTRING()) format = this.transformToFormat(context.QUOTESTRING().text);
+        return {...outputs, print: format};
     }
     
     //option to print the date in the title
     visitOutputPrintTitle(context: parser.OutputPrintContext): Command {
         var outputs: Command = {};
-    	if(context.output()) outputs = context.output().accept(this);
-    	var format: string = 'LLL';
-    	if(context.QUOTESTRING()) format = this.transformToFormat(context.QUOTESTRING().text);
-    	return {...outputs, printTitle: format};
+        if(context.output()) outputs = context.output().accept(this);
+        var format: string = 'LLL';
+        if(context.QUOTESTRING()) format = this.transformToFormat(context.QUOTESTRING().text);
+        return {...outputs, printTitle: format};
     }
     
     //function to transform our format style to moment format style

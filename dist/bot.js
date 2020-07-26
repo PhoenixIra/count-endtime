@@ -8,8 +8,6 @@ const antlr4ts_1 = require("antlr4ts");
 const CommandLexer_js_1 = require("./parser/CommandLexer.js");
 const CommandParser_js_1 = require("./parser/CommandParser.js");
 const commandVisitor_1 = require("./commandVisitor");
-//TODO: change to en+server loading
-moment.locale('de');
 var timezoneAbbr = new Map();
 timezoneAbbr.set('UT', '0');
 timezoneAbbr.set('GMT', '0');
@@ -98,11 +96,19 @@ function handleMoment(result, message) {
             //TODO
         }
         if (result.print) {
-            message.channel.send(t.tz(timezone).format(result.print));
+            message.channel.send(t.locale(getLocale(message)).tz(timezone).format(result.print));
         }
     }
     catch (error) {
         //TODO: Error handling
         logger.warn(error.message);
     }
+}
+function getLocale(message) {
+    //TODO: ServerConfig
+    //TODO: UserConfig
+    if (message.author.locale) {
+        return message.author.locale;
+    }
+    return 'en';
 }
