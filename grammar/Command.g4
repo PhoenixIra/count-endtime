@@ -6,7 +6,9 @@ command
       ;
       
 server
-      : '.locale ' STRING #ServerLocale
+      : '.locale ' STRING 	#ServerLocale
+      | '.timezone ' STRING 	#ServerTimezone
+      | '.format ' QUOTESTRING #ServerFormat
       ; 
       
 moment

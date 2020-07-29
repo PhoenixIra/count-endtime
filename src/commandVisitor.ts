@@ -10,6 +10,8 @@ export enum CommandType {moment, server, help}
 export interface Command{
     type?: (CommandType | undefined);
     locale?: (string | undefined);
+    timezone?: (string | undefined);
+    format?: (string | undefined);
     now?: (boolean | undefined);
     load?: (string | undefined);
     input?: (string | undefined);
@@ -43,6 +45,16 @@ export class StandardCommandVisitor extends AbstractParseTreeVisitor<Command> im
     //Command to change the locale of this server
     visitServerLocale(context: parser.ServerLocaleContext): Command {
         return {locale: context.STRING().text};
+    }
+    
+    //Command to change the locale of this server
+    visitServerTimezone(context: parser.ServerTimezoneContext): Command {
+        return {timezone: context.STRING().text};
+    }
+    
+    //Command to change the locale of this server
+    visitServerFormat(context: parser.ServerFormatContext): Command {
+        return {format: context.QUOTESTRING().text};
     }
 
     //Command to generate the current moment

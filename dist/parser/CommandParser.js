@@ -1,7 +1,7 @@
 "use strict";
 // Generated from Command.g4 by ANTLR 4.7.3-SNAPSHOT
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.OutputPrintTitleContext = exports.OutputPrintContext = exports.OutputSaveContext = exports.OutputToContext = exports.OutputCountdownContext = exports.OutputCountdownTitleContext = exports.OutputContext = exports.MomentInputWoQContext = exports.MomentInputContext = exports.MomentLoadContext = exports.MomentNowContext = exports.MomentContext = exports.ServerLocaleContext = exports.ServerContext = exports.CommandMomentContext = exports.CommandServerContext = exports.CommandContext = exports.CommandParser = void 0;
+exports.OutputPrintTitleContext = exports.OutputPrintContext = exports.OutputSaveContext = exports.OutputToContext = exports.OutputCountdownContext = exports.OutputCountdownTitleContext = exports.OutputContext = exports.MomentInputWoQContext = exports.MomentInputContext = exports.MomentLoadContext = exports.MomentNowContext = exports.MomentContext = exports.ServerFormatContext = exports.ServerTimezoneContext = exports.ServerLocaleContext = exports.ServerContext = exports.CommandMomentContext = exports.CommandServerContext = exports.CommandContext = exports.CommandParser = void 0;
 const ATNDeserializer_1 = require("antlr4ts/atn/ATNDeserializer");
 const NoViableAltException_1 = require("antlr4ts/NoViableAltException");
 const Parser_1 = require("antlr4ts/Parser");
@@ -36,6 +36,8 @@ class CommandParser extends Parser_1.Parser {
             this._errHandler.sync(this);
             switch (this._input.LA(1)) {
                 case CommandParser.T__0:
+                case CommandParser.T__1:
+                case CommandParser.T__2:
                     _localctx = new CommandServerContext(_localctx);
                     this.enterOuterAlt(_localctx, 1);
                     {
@@ -43,9 +45,9 @@ class CommandParser extends Parser_1.Parser {
                         this.server();
                     }
                     break;
-                case CommandParser.T__1:
-                case CommandParser.T__2:
                 case CommandParser.T__3:
+                case CommandParser.T__4:
+                case CommandParser.T__5:
                     _localctx = new CommandMomentContext(_localctx);
                     this.enterOuterAlt(_localctx, 2);
                     {
@@ -79,13 +81,41 @@ class CommandParser extends Parser_1.Parser {
         let _localctx = new ServerContext(this._ctx, this.state);
         this.enterRule(_localctx, 2, CommandParser.RULE_server);
         try {
-            _localctx = new ServerLocaleContext(_localctx);
-            this.enterOuterAlt(_localctx, 1);
-            {
-                this.state = 14;
-                this.match(CommandParser.T__0);
-                this.state = 15;
-                this.match(CommandParser.STRING);
+            this.state = 20;
+            this._errHandler.sync(this);
+            switch (this._input.LA(1)) {
+                case CommandParser.T__0:
+                    _localctx = new ServerLocaleContext(_localctx);
+                    this.enterOuterAlt(_localctx, 1);
+                    {
+                        this.state = 14;
+                        this.match(CommandParser.T__0);
+                        this.state = 15;
+                        this.match(CommandParser.STRING);
+                    }
+                    break;
+                case CommandParser.T__1:
+                    _localctx = new ServerTimezoneContext(_localctx);
+                    this.enterOuterAlt(_localctx, 2);
+                    {
+                        this.state = 16;
+                        this.match(CommandParser.T__1);
+                        this.state = 17;
+                        this.match(CommandParser.STRING);
+                    }
+                    break;
+                case CommandParser.T__2:
+                    _localctx = new ServerFormatContext(_localctx);
+                    this.enterOuterAlt(_localctx, 3);
+                    {
+                        this.state = 18;
+                        this.match(CommandParser.T__2);
+                        this.state = 19;
+                        this.match(CommandParser.QUOTESTRING);
+                    }
+                    break;
+                default:
+                    throw new NoViableAltException_1.NoViableAltException(this);
             }
         }
         catch (re) {
@@ -109,24 +139,24 @@ class CommandParser extends Parser_1.Parser {
         this.enterRule(_localctx, 4, CommandParser.RULE_moment);
         let _la;
         try {
-            this.state = 40;
+            this.state = 45;
             this._errHandler.sync(this);
-            switch (this.interpreter.adaptivePredict(this._input, 5, this._ctx)) {
+            switch (this.interpreter.adaptivePredict(this._input, 6, this._ctx)) {
                 case 1:
                     _localctx = new MomentNowContext(_localctx);
                     this.enterOuterAlt(_localctx, 1);
                     {
-                        this.state = 17;
-                        this.match(CommandParser.T__1);
+                        this.state = 22;
+                        this.match(CommandParser.T__3);
                     }
                     break;
                 case 2:
                     _localctx = new MomentLoadContext(_localctx);
                     this.enterOuterAlt(_localctx, 2);
                     {
-                        this.state = 18;
-                        this.match(CommandParser.T__2);
-                        this.state = 19;
+                        this.state = 23;
+                        this.match(CommandParser.T__4);
+                        this.state = 24;
                         this.match(CommandParser.STRING);
                     }
                     break;
@@ -134,29 +164,29 @@ class CommandParser extends Parser_1.Parser {
                     _localctx = new MomentInputContext(_localctx);
                     this.enterOuterAlt(_localctx, 3);
                     {
-                        this.state = 20;
-                        this.match(CommandParser.T__3);
-                        this.state = 21;
+                        this.state = 25;
+                        this.match(CommandParser.T__5);
+                        this.state = 26;
                         this.match(CommandParser.QUOTESTRING);
-                        this.state = 24;
+                        this.state = 29;
                         this._errHandler.sync(this);
                         _la = this._input.LA(1);
-                        if (_la === CommandParser.T__4) {
+                        if (_la === CommandParser.T__6) {
                             {
-                                this.state = 22;
-                                this.match(CommandParser.T__4);
-                                this.state = 23;
+                                this.state = 27;
+                                this.match(CommandParser.T__6);
+                                this.state = 28;
                                 this.match(CommandParser.STRING);
                             }
                         }
-                        this.state = 28;
+                        this.state = 33;
                         this._errHandler.sync(this);
                         _la = this._input.LA(1);
-                        if (_la === CommandParser.T__5) {
+                        if (_la === CommandParser.T__7) {
                             {
-                                this.state = 26;
-                                this.match(CommandParser.T__5);
-                                this.state = 27;
+                                this.state = 31;
+                                this.match(CommandParser.T__7);
+                                this.state = 32;
                                 this.match(CommandParser.QUOTESTRING);
                             }
                         }
@@ -166,29 +196,29 @@ class CommandParser extends Parser_1.Parser {
                     _localctx = new MomentInputWoQContext(_localctx);
                     this.enterOuterAlt(_localctx, 4);
                     {
-                        this.state = 30;
-                        this.match(CommandParser.T__3);
-                        this.state = 31;
+                        this.state = 35;
+                        this.match(CommandParser.T__5);
+                        this.state = 36;
                         this.match(CommandParser.STRING);
-                        this.state = 34;
+                        this.state = 39;
                         this._errHandler.sync(this);
                         _la = this._input.LA(1);
-                        if (_la === CommandParser.T__4) {
+                        if (_la === CommandParser.T__6) {
                             {
-                                this.state = 32;
-                                this.match(CommandParser.T__4);
-                                this.state = 33;
+                                this.state = 37;
+                                this.match(CommandParser.T__6);
+                                this.state = 38;
                                 this.match(CommandParser.STRING);
                             }
                         }
-                        this.state = 38;
+                        this.state = 43;
                         this._errHandler.sync(this);
                         _la = this._input.LA(1);
-                        if (_la === CommandParser.T__5) {
+                        if (_la === CommandParser.T__7) {
                             {
-                                this.state = 36;
-                                this.match(CommandParser.T__5);
-                                this.state = 37;
+                                this.state = 41;
+                                this.match(CommandParser.T__7);
+                                this.state = 42;
                                 this.match(CommandParser.QUOTESTRING);
                             }
                         }
@@ -217,77 +247,58 @@ class CommandParser extends Parser_1.Parser {
         this.enterRule(_localctx, 6, CommandParser.RULE_output);
         let _la;
         try {
-            this.state = 84;
+            this.state = 89;
             this._errHandler.sync(this);
             switch (this._input.LA(1)) {
-                case CommandParser.T__6:
+                case CommandParser.T__8:
                     _localctx = new OutputCountdownTitleContext(_localctx);
                     this.enterOuterAlt(_localctx, 1);
                     {
-                        this.state = 42;
-                        this.match(CommandParser.T__6);
-                        this.state = 45;
+                        this.state = 47;
+                        this.match(CommandParser.T__8);
+                        this.state = 50;
                         this._errHandler.sync(this);
                         _la = this._input.LA(1);
-                        if (_la === CommandParser.T__7) {
+                        if (_la === CommandParser.T__9) {
                             {
-                                this.state = 43;
-                                this.match(CommandParser.T__7);
-                                this.state = 44;
+                                this.state = 48;
+                                this.match(CommandParser.T__9);
+                                this.state = 49;
                                 this.match(CommandParser.STRING);
                             }
                         }
-                        this.state = 48;
-                        this._errHandler.sync(this);
-                        _la = this._input.LA(1);
-                        if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CommandParser.T__6) | (1 << CommandParser.T__8) | (1 << CommandParser.T__9) | (1 << CommandParser.T__10) | (1 << CommandParser.T__11) | (1 << CommandParser.T__13))) !== 0)) {
-                            {
-                                this.state = 47;
-                                this.output();
-                            }
-                        }
-                    }
-                    break;
-                case CommandParser.T__8:
-                    _localctx = new OutputCountdownContext(_localctx);
-                    this.enterOuterAlt(_localctx, 2);
-                    {
-                        this.state = 50;
-                        this.match(CommandParser.T__8);
                         this.state = 53;
                         this._errHandler.sync(this);
                         _la = this._input.LA(1);
-                        if (_la === CommandParser.T__7) {
+                        if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CommandParser.T__8) | (1 << CommandParser.T__10) | (1 << CommandParser.T__11) | (1 << CommandParser.T__12) | (1 << CommandParser.T__13) | (1 << CommandParser.T__15))) !== 0)) {
                             {
-                                this.state = 51;
-                                this.match(CommandParser.T__7);
                                 this.state = 52;
-                                this.match(CommandParser.STRING);
-                            }
-                        }
-                        this.state = 56;
-                        this._errHandler.sync(this);
-                        _la = this._input.LA(1);
-                        if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CommandParser.T__6) | (1 << CommandParser.T__8) | (1 << CommandParser.T__9) | (1 << CommandParser.T__10) | (1 << CommandParser.T__11) | (1 << CommandParser.T__13))) !== 0)) {
-                            {
-                                this.state = 55;
                                 this.output();
                             }
                         }
                     }
                     break;
-                case CommandParser.T__9:
-                    _localctx = new OutputToContext(_localctx);
-                    this.enterOuterAlt(_localctx, 3);
+                case CommandParser.T__10:
+                    _localctx = new OutputCountdownContext(_localctx);
+                    this.enterOuterAlt(_localctx, 2);
                     {
+                        this.state = 55;
+                        this.match(CommandParser.T__10);
                         this.state = 58;
-                        this.match(CommandParser.T__9);
-                        this.state = 59;
-                        this.match(CommandParser.STRING);
+                        this._errHandler.sync(this);
+                        _la = this._input.LA(1);
+                        if (_la === CommandParser.T__9) {
+                            {
+                                this.state = 56;
+                                this.match(CommandParser.T__9);
+                                this.state = 57;
+                                this.match(CommandParser.STRING);
+                            }
+                        }
                         this.state = 61;
                         this._errHandler.sync(this);
                         _la = this._input.LA(1);
-                        if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CommandParser.T__6) | (1 << CommandParser.T__8) | (1 << CommandParser.T__9) | (1 << CommandParser.T__10) | (1 << CommandParser.T__11) | (1 << CommandParser.T__13))) !== 0)) {
+                        if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CommandParser.T__8) | (1 << CommandParser.T__10) | (1 << CommandParser.T__11) | (1 << CommandParser.T__12) | (1 << CommandParser.T__13) | (1 << CommandParser.T__15))) !== 0)) {
                             {
                                 this.state = 60;
                                 this.output();
@@ -295,18 +306,18 @@ class CommandParser extends Parser_1.Parser {
                         }
                     }
                     break;
-                case CommandParser.T__10:
-                    _localctx = new OutputSaveContext(_localctx);
-                    this.enterOuterAlt(_localctx, 4);
+                case CommandParser.T__11:
+                    _localctx = new OutputToContext(_localctx);
+                    this.enterOuterAlt(_localctx, 3);
                     {
                         this.state = 63;
-                        this.match(CommandParser.T__10);
+                        this.match(CommandParser.T__11);
                         this.state = 64;
                         this.match(CommandParser.STRING);
                         this.state = 66;
                         this._errHandler.sync(this);
                         _la = this._input.LA(1);
-                        if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CommandParser.T__6) | (1 << CommandParser.T__8) | (1 << CommandParser.T__9) | (1 << CommandParser.T__10) | (1 << CommandParser.T__11) | (1 << CommandParser.T__13))) !== 0)) {
+                        if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CommandParser.T__8) | (1 << CommandParser.T__10) | (1 << CommandParser.T__11) | (1 << CommandParser.T__12) | (1 << CommandParser.T__13) | (1 << CommandParser.T__15))) !== 0)) {
                             {
                                 this.state = 65;
                                 this.output();
@@ -314,57 +325,76 @@ class CommandParser extends Parser_1.Parser {
                         }
                     }
                     break;
-                case CommandParser.T__11:
-                    _localctx = new OutputPrintContext(_localctx);
-                    this.enterOuterAlt(_localctx, 5);
+                case CommandParser.T__12:
+                    _localctx = new OutputSaveContext(_localctx);
+                    this.enterOuterAlt(_localctx, 4);
                     {
                         this.state = 68;
-                        this.match(CommandParser.T__11);
+                        this.match(CommandParser.T__12);
+                        this.state = 69;
+                        this.match(CommandParser.STRING);
                         this.state = 71;
                         this._errHandler.sync(this);
                         _la = this._input.LA(1);
-                        if (_la === CommandParser.T__12) {
+                        if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CommandParser.T__8) | (1 << CommandParser.T__10) | (1 << CommandParser.T__11) | (1 << CommandParser.T__12) | (1 << CommandParser.T__13) | (1 << CommandParser.T__15))) !== 0)) {
                             {
-                                this.state = 69;
-                                this.match(CommandParser.T__12);
                                 this.state = 70;
-                                this.match(CommandParser.QUOTESTRING);
-                            }
-                        }
-                        this.state = 74;
-                        this._errHandler.sync(this);
-                        _la = this._input.LA(1);
-                        if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CommandParser.T__6) | (1 << CommandParser.T__8) | (1 << CommandParser.T__9) | (1 << CommandParser.T__10) | (1 << CommandParser.T__11) | (1 << CommandParser.T__13))) !== 0)) {
-                            {
-                                this.state = 73;
                                 this.output();
                             }
                         }
                     }
                     break;
                 case CommandParser.T__13:
-                    _localctx = new OutputPrintTitleContext(_localctx);
-                    this.enterOuterAlt(_localctx, 6);
+                    _localctx = new OutputPrintContext(_localctx);
+                    this.enterOuterAlt(_localctx, 5);
                     {
-                        this.state = 76;
+                        this.state = 73;
                         this.match(CommandParser.T__13);
-                        this.state = 79;
+                        this.state = 76;
                         this._errHandler.sync(this);
                         _la = this._input.LA(1);
-                        if (_la === CommandParser.T__12) {
+                        if (_la === CommandParser.T__14) {
                             {
-                                this.state = 77;
-                                this.match(CommandParser.T__12);
-                                this.state = 78;
+                                this.state = 74;
+                                this.match(CommandParser.T__14);
+                                this.state = 75;
                                 this.match(CommandParser.QUOTESTRING);
                             }
                         }
-                        this.state = 82;
+                        this.state = 79;
                         this._errHandler.sync(this);
                         _la = this._input.LA(1);
-                        if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CommandParser.T__6) | (1 << CommandParser.T__8) | (1 << CommandParser.T__9) | (1 << CommandParser.T__10) | (1 << CommandParser.T__11) | (1 << CommandParser.T__13))) !== 0)) {
+                        if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CommandParser.T__8) | (1 << CommandParser.T__10) | (1 << CommandParser.T__11) | (1 << CommandParser.T__12) | (1 << CommandParser.T__13) | (1 << CommandParser.T__15))) !== 0)) {
                             {
-                                this.state = 81;
+                                this.state = 78;
+                                this.output();
+                            }
+                        }
+                    }
+                    break;
+                case CommandParser.T__15:
+                    _localctx = new OutputPrintTitleContext(_localctx);
+                    this.enterOuterAlt(_localctx, 6);
+                    {
+                        this.state = 81;
+                        this.match(CommandParser.T__15);
+                        this.state = 84;
+                        this._errHandler.sync(this);
+                        _la = this._input.LA(1);
+                        if (_la === CommandParser.T__14) {
+                            {
+                                this.state = 82;
+                                this.match(CommandParser.T__14);
+                                this.state = 83;
+                                this.match(CommandParser.QUOTESTRING);
+                            }
+                        }
+                        this.state = 87;
+                        this._errHandler.sync(this);
+                        _la = this._input.LA(1);
+                        if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << CommandParser.T__8) | (1 << CommandParser.T__10) | (1 << CommandParser.T__11) | (1 << CommandParser.T__12) | (1 << CommandParser.T__13) | (1 << CommandParser.T__15))) !== 0)) {
+                            {
+                                this.state = 86;
                                 this.output();
                             }
                         }
@@ -411,8 +441,10 @@ CommandParser.T__10 = 11;
 CommandParser.T__11 = 12;
 CommandParser.T__12 = 13;
 CommandParser.T__13 = 14;
-CommandParser.QUOTESTRING = 15;
-CommandParser.STRING = 16;
+CommandParser.T__14 = 15;
+CommandParser.T__15 = 16;
+CommandParser.QUOTESTRING = 17;
+CommandParser.STRING = 18;
 CommandParser.RULE_command = 0;
 CommandParser.RULE_server = 1;
 CommandParser.RULE_moment = 2;
@@ -422,57 +454,59 @@ CommandParser.ruleNames = [
     "command", "server", "moment", "output",
 ];
 CommandParser._LITERAL_NAMES = [
-    undefined, "'.locale '", "'.now'", "'.load '", "'.input '", "' in '",
-    "' as '", "' countdown in Title'", "'as'", "' countdown'", "' to '", "' save '",
-    "' print'", "' '", "' print in Title'",
+    undefined, "'.locale '", "'.timezone '", "'.format '", "'.now'", "'.load '",
+    "'.input '", "' in '", "' as '", "' countdown in Title'", "'as'", "' countdown'",
+    "' to '", "' save '", "' print'", "' '", "' print in Title'",
 ];
 CommandParser._SYMBOLIC_NAMES = [
     undefined, undefined, undefined, undefined, undefined, undefined, undefined,
     undefined, undefined, undefined, undefined, undefined, undefined, undefined,
-    undefined, "QUOTESTRING", "STRING",
+    undefined, undefined, undefined, "QUOTESTRING", "STRING",
 ];
 CommandParser.VOCABULARY = new VocabularyImpl_1.VocabularyImpl(CommandParser._LITERAL_NAMES, CommandParser._SYMBOLIC_NAMES, []);
-CommandParser._serializedATN = "\x03\uC91D\uCABA\u058D\uAFBA\u4F53\u0607\uEA8B\uC241\x03\x12Y\x04\x02" +
+CommandParser._serializedATN = "\x03\uC91D\uCABA\u058D\uAFBA\u4F53\u0607\uEA8B\uC241\x03\x14^\x04\x02" +
     "\t\x02\x04\x03\t\x03\x04\x04\t\x04\x04\x05\t\x05\x03\x02\x03\x02\x03\x02" +
-    "\x03\x02\x05\x02\x0F\n\x02\x03\x03\x03\x03\x03\x03\x03\x04\x03\x04\x03" +
-    "\x04\x03\x04\x03\x04\x03\x04\x03\x04\x05\x04\x1B\n\x04\x03\x04\x03\x04" +
-    "\x05\x04\x1F\n\x04\x03\x04\x03\x04\x03\x04\x03\x04\x05\x04%\n\x04\x03" +
-    "\x04\x03\x04\x05\x04)\n\x04\x05\x04+\n\x04\x03\x05\x03\x05\x03\x05\x05" +
-    "\x050\n\x05\x03\x05\x05\x053\n\x05\x03\x05\x03\x05\x03\x05\x05\x058\n" +
-    "\x05\x03\x05\x05\x05;\n\x05\x03\x05\x03\x05\x03\x05\x05\x05@\n\x05\x03" +
-    "\x05\x03\x05\x03\x05\x05\x05E\n\x05\x03\x05\x03\x05\x03\x05\x05\x05J\n" +
-    "\x05\x03\x05\x05\x05M\n\x05\x03\x05\x03\x05\x03\x05\x05\x05R\n\x05\x03" +
-    "\x05\x05\x05U\n\x05\x05\x05W\n\x05\x03\x05\x02\x02\x02\x06\x02\x02\x04" +
-    "\x02\x06\x02\b\x02\x02\x02\x02k\x02\x0E\x03\x02\x02\x02\x04\x10\x03\x02" +
-    "\x02\x02\x06*\x03\x02\x02\x02\bV\x03\x02\x02\x02\n\x0F\x05\x04\x03\x02" +
-    "\v\f\x05\x06\x04\x02\f\r\x05\b\x05\x02\r\x0F\x03\x02\x02\x02\x0E\n\x03" +
-    "\x02\x02\x02\x0E\v\x03\x02\x02\x02\x0F\x03\x03\x02\x02\x02\x10\x11\x07" +
-    "\x03\x02\x02\x11\x12\x07\x12\x02\x02\x12\x05\x03\x02\x02\x02\x13+\x07" +
-    "\x04\x02\x02\x14\x15\x07\x05\x02\x02\x15+\x07\x12\x02\x02\x16\x17\x07" +
-    "\x06\x02\x02\x17\x1A\x07\x11\x02\x02\x18\x19\x07\x07\x02\x02\x19\x1B\x07" +
-    "\x12\x02\x02\x1A\x18\x03\x02\x02\x02\x1A\x1B\x03\x02\x02\x02\x1B\x1E\x03" +
-    "\x02\x02\x02\x1C\x1D\x07\b\x02\x02\x1D\x1F\x07\x11\x02\x02\x1E\x1C\x03" +
-    "\x02\x02\x02\x1E\x1F\x03\x02\x02\x02\x1F+\x03\x02\x02\x02 !\x07\x06\x02" +
-    "\x02!$\x07\x12\x02\x02\"#\x07\x07\x02\x02#%\x07\x12\x02\x02$\"\x03\x02" +
-    "\x02\x02$%\x03\x02\x02\x02%(\x03\x02\x02\x02&\'\x07\b\x02\x02\')\x07\x11" +
-    "\x02\x02(&\x03\x02\x02\x02()\x03\x02\x02\x02)+\x03\x02\x02\x02*\x13\x03" +
-    "\x02\x02\x02*\x14\x03\x02\x02\x02*\x16\x03\x02\x02\x02* \x03\x02\x02\x02" +
-    "+\x07\x03\x02\x02\x02,/\x07\t\x02\x02-.\x07\n\x02\x02.0\x07\x12\x02\x02" +
-    "/-\x03\x02\x02\x02/0\x03\x02\x02\x0202\x03\x02\x02\x0213\x05\b\x05\x02" +
-    "21\x03\x02\x02\x0223\x03\x02\x02\x023W\x03\x02\x02\x0247\x07\v\x02\x02" +
-    "56\x07\n\x02\x0268\x07\x12\x02\x0275\x03\x02\x02\x0278\x03\x02\x02\x02" +
-    "8:\x03\x02\x02\x029;\x05\b\x05\x02:9\x03\x02\x02\x02:;\x03\x02\x02\x02" +
-    ";W\x03\x02\x02\x02<=\x07\f\x02\x02=?\x07\x12\x02\x02>@\x05\b\x05\x02?" +
-    ">\x03\x02\x02\x02?@\x03\x02\x02\x02@W\x03\x02\x02\x02AB\x07\r\x02\x02" +
-    "BD\x07\x12\x02\x02CE\x05\b\x05\x02DC\x03\x02\x02\x02DE\x03\x02\x02\x02" +
-    "EW\x03\x02\x02\x02FI\x07\x0E\x02\x02GH\x07\x0F\x02\x02HJ\x07\x11\x02\x02" +
-    "IG\x03\x02\x02\x02IJ\x03\x02\x02\x02JL\x03\x02\x02\x02KM\x05\b\x05\x02" +
-    "LK\x03\x02\x02\x02LM\x03\x02\x02\x02MW\x03\x02\x02\x02NQ\x07\x10\x02\x02" +
-    "OP\x07\x0F\x02\x02PR\x07\x11\x02\x02QO\x03\x02\x02\x02QR\x03\x02\x02\x02" +
-    "RT\x03\x02\x02\x02SU\x05\b\x05\x02TS\x03\x02\x02\x02TU\x03\x02\x02\x02" +
-    "UW\x03\x02\x02\x02V,\x03\x02\x02\x02V4\x03\x02\x02\x02V<\x03\x02\x02\x02" +
-    "VA\x03\x02\x02\x02VF\x03\x02\x02\x02VN\x03\x02\x02\x02W\t\x03\x02\x02" +
-    "\x02\x13\x0E\x1A\x1E$(*/27:?DILQTV";
+    "\x03\x02\x05\x02\x0F\n\x02\x03\x03\x03\x03\x03\x03\x03\x03\x03\x03\x03" +
+    "\x03\x05\x03\x17\n\x03\x03\x04\x03\x04\x03\x04\x03\x04\x03\x04\x03\x04" +
+    "\x03\x04\x05\x04 \n\x04\x03\x04\x03\x04\x05\x04$\n\x04\x03\x04\x03\x04" +
+    "\x03\x04\x03\x04\x05\x04*\n\x04\x03\x04\x03\x04\x05\x04.\n\x04\x05\x04" +
+    "0\n\x04\x03\x05\x03\x05\x03\x05\x05\x055\n\x05\x03\x05\x05\x058\n\x05" +
+    "\x03\x05\x03\x05\x03\x05\x05\x05=\n\x05\x03\x05\x05\x05@\n\x05\x03\x05" +
+    "\x03\x05\x03\x05\x05\x05E\n\x05\x03\x05\x03\x05\x03\x05\x05\x05J\n\x05" +
+    "\x03\x05\x03\x05\x03\x05\x05\x05O\n\x05\x03\x05\x05\x05R\n\x05\x03\x05" +
+    "\x03\x05\x03\x05\x05\x05W\n\x05\x03\x05\x05\x05Z\n\x05\x05\x05\\\n\x05" +
+    "\x03\x05\x02\x02\x02\x06\x02\x02\x04\x02\x06\x02\b\x02\x02\x02\x02r\x02" +
+    "\x0E\x03\x02\x02\x02\x04\x16\x03\x02\x02\x02\x06/\x03\x02\x02\x02\b[\x03" +
+    "\x02\x02\x02\n\x0F\x05\x04\x03\x02\v\f\x05\x06\x04\x02\f\r\x05\b\x05\x02" +
+    "\r\x0F\x03\x02\x02\x02\x0E\n\x03\x02\x02\x02\x0E\v\x03\x02\x02\x02\x0F" +
+    "\x03\x03\x02\x02\x02\x10\x11\x07\x03\x02\x02\x11\x17\x07\x14\x02\x02\x12" +
+    "\x13\x07\x04\x02\x02\x13\x17\x07\x14\x02\x02\x14\x15\x07\x05\x02\x02\x15" +
+    "\x17\x07\x13\x02\x02\x16\x10\x03\x02\x02\x02\x16\x12\x03\x02\x02\x02\x16" +
+    "\x14\x03\x02\x02\x02\x17\x05\x03\x02\x02\x02\x180\x07\x06\x02\x02\x19" +
+    "\x1A\x07\x07\x02\x02\x1A0\x07\x14\x02\x02\x1B\x1C\x07\b\x02\x02\x1C\x1F" +
+    "\x07\x13\x02\x02\x1D\x1E\x07\t\x02\x02\x1E \x07\x14\x02\x02\x1F\x1D\x03" +
+    "\x02\x02\x02\x1F \x03\x02\x02\x02 #\x03\x02\x02\x02!\"\x07\n\x02\x02\"" +
+    "$\x07\x13\x02\x02#!\x03\x02\x02\x02#$\x03\x02\x02\x02$0\x03\x02\x02\x02" +
+    "%&\x07\b\x02\x02&)\x07\x14\x02\x02\'(\x07\t\x02\x02(*\x07\x14\x02\x02" +
+    ")\'\x03\x02\x02\x02)*\x03\x02\x02\x02*-\x03\x02\x02\x02+,\x07\n\x02\x02" +
+    ",.\x07\x13\x02\x02-+\x03\x02\x02\x02-.\x03\x02\x02\x02.0\x03\x02\x02\x02" +
+    "/\x18\x03\x02\x02\x02/\x19\x03\x02\x02\x02/\x1B\x03\x02\x02\x02/%\x03" +
+    "\x02\x02\x020\x07\x03\x02\x02\x0214\x07\v\x02\x0223\x07\f\x02\x0235\x07" +
+    "\x14\x02\x0242\x03\x02\x02\x0245\x03\x02\x02\x0257\x03\x02\x02\x0268\x05" +
+    "\b\x05\x0276\x03\x02\x02\x0278\x03\x02\x02\x028\\\x03\x02\x02\x029<\x07" +
+    "\r\x02\x02:;\x07\f\x02\x02;=\x07\x14\x02\x02<:\x03\x02\x02\x02<=\x03\x02" +
+    "\x02\x02=?\x03\x02\x02\x02>@\x05\b\x05\x02?>\x03\x02\x02\x02?@\x03\x02" +
+    "\x02\x02@\\\x03\x02\x02\x02AB\x07\x0E\x02\x02BD\x07\x14\x02\x02CE\x05" +
+    "\b\x05\x02DC\x03\x02\x02\x02DE\x03\x02\x02\x02E\\\x03\x02\x02\x02FG\x07" +
+    "\x0F\x02\x02GI\x07\x14\x02\x02HJ\x05\b\x05\x02IH\x03\x02\x02\x02IJ\x03" +
+    "\x02\x02\x02J\\\x03\x02\x02\x02KN\x07\x10\x02\x02LM\x07\x11\x02\x02MO" +
+    "\x07\x13\x02\x02NL\x03\x02\x02\x02NO\x03\x02\x02\x02OQ\x03\x02\x02\x02" +
+    "PR\x05\b\x05\x02QP\x03\x02\x02\x02QR\x03\x02\x02\x02R\\\x03\x02\x02\x02" +
+    "SV\x07\x12\x02\x02TU\x07\x11\x02\x02UW\x07\x13\x02\x02VT\x03\x02\x02\x02" +
+    "VW\x03\x02\x02\x02WY\x03\x02\x02\x02XZ\x05\b\x05\x02YX\x03\x02\x02\x02" +
+    "YZ\x03\x02\x02\x02Z\\\x03\x02\x02\x02[1\x03\x02\x02\x02[9\x03\x02\x02" +
+    "\x02[A\x03\x02\x02\x02[F\x03\x02\x02\x02[K\x03\x02\x02\x02[S\x03\x02\x02" +
+    "\x02\\\t\x03\x02\x02\x02\x14\x0E\x16\x1F#)-/47<?DINQVY[";
 class CommandContext extends ParserRuleContext_1.ParserRuleContext {
     constructor(parent, invokingState) {
         super(parent, invokingState);
@@ -589,6 +623,64 @@ class ServerLocaleContext extends ServerContext {
     }
 }
 exports.ServerLocaleContext = ServerLocaleContext;
+class ServerTimezoneContext extends ServerContext {
+    STRING() { return this.getToken(CommandParser.STRING, 0); }
+    constructor(ctx) {
+        super(ctx.parent, ctx.invokingState);
+        this.copyFrom(ctx);
+    }
+    // @Override
+    enterRule(listener) {
+        if (listener.enterServerTimezone) {
+            listener.enterServerTimezone(this);
+        }
+    }
+    // @Override
+    exitRule(listener) {
+        if (listener.exitServerTimezone) {
+            listener.exitServerTimezone(this);
+        }
+    }
+    // @Override
+    accept(visitor) {
+        if (visitor.visitServerTimezone) {
+            return visitor.visitServerTimezone(this);
+        }
+        else {
+            return visitor.visitChildren(this);
+        }
+    }
+}
+exports.ServerTimezoneContext = ServerTimezoneContext;
+class ServerFormatContext extends ServerContext {
+    QUOTESTRING() { return this.getToken(CommandParser.QUOTESTRING, 0); }
+    constructor(ctx) {
+        super(ctx.parent, ctx.invokingState);
+        this.copyFrom(ctx);
+    }
+    // @Override
+    enterRule(listener) {
+        if (listener.enterServerFormat) {
+            listener.enterServerFormat(this);
+        }
+    }
+    // @Override
+    exitRule(listener) {
+        if (listener.exitServerFormat) {
+            listener.exitServerFormat(this);
+        }
+    }
+    // @Override
+    accept(visitor) {
+        if (visitor.visitServerFormat) {
+            return visitor.visitServerFormat(this);
+        }
+        else {
+            return visitor.visitChildren(this);
+        }
+    }
+}
+exports.ServerFormatContext = ServerFormatContext;
 class MomentContext extends ParserRuleContext_1.ParserRuleContext {
     constructor(parent, invokingState) {
         super(parent, invokingState);

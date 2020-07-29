@@ -6,19 +6,10 @@ import { ANTLRInputStream, CommonTokenStream, BailErrorStrategy } from 'antlr4ts
 import { CommandLexer } from './parser/CommandLexer.js';
 import { CommandParser, CommandContext } from './parser/CommandParser.js';
 import { StandardCommandVisitor, Command, CommandType} from './commandVisitor';
-import { GuildStorage } from './database';
+import { GuildStorage, GuildOption, MomentEpoch, Countdown } from './database';
+const iso6391 = require('iso-639-1');
 
-var timezoneAbbr = new Map();
-timezoneAbbr.set('UT','0');
-timezoneAbbr.set('GMT','0');
-timezoneAbbr.set('EDT','-4');
-timezoneAbbr.set('EST','-5');
-timezoneAbbr.set('CDT','-5');
-timezoneAbbr.set('CST','-6');
-timezoneAbbr.set('MDT','-6');
-timezoneAbbr.set('MST','-7');
-timezoneAbbr.set('PDT','-7');
-timezoneAbbr.set('PST','-8');
+var guildStorage = new GuildStorage("guild_storage.db");
 
 
 // Configure logger settings
@@ -36,6 +27,8 @@ function onReady():void {
     logger.info('Connected');
     logger.info('Logged in as: ');
     logger.info(bot.user.username + ' - (' + bot.user.id + ')');
+    if(guildStorage.error)
+    	logger.error('Database error: ' + guildStorage.error.message);
 }
 
 function onMessage(message: Discord.Message):void {
@@ -67,29 +60,51 @@ function onMessage(message: Discord.Message):void {
                 message.channel.send("No.");
         }
     } catch(error){
-        //TODO: Error handling
         logger.warn(error.message);
     }
 }
 
 function handleServer(result: Command, message: Discord.Message):void{
+    if(!message.guild) return; //TODO: Error message
+    var guild = message.guild;
     
+    var options: GuildOption = {locale: undefined, format: undefined, timezone: undefined};
+    if(result.locale && iso6391.validate(result.locale))
+    	options.locale = result.locale;
+    if(result.format)
+        options.format = result.format;
+    if(result.timezone && moment().tz(result.timezone).isValid())
+        options.timezone = result.timezone;
+        
+    guildStorage.writeGuildOption(guild.id, options);
 }
 
 function handleMoment(result: Command, message: Discord.Message):void{
+    //try to catch standard options
+    var options: GuildOption = {locale: undefined, format: undefined, timezone: undefined};
+    if(message.guild) options = guildStorage.readGuildOption(message.guild.id);
+    
     try{
+        //get the moment saved in t
         if(result.now){
             var t = moment();
         }else if(result.load){
-            //TODO
+            if(message.guild) var t = moment(guildStorage.readMoment(message.guild.id, result.load).momentEpoch);
         }else if(result.input && result.inTz){
             var t = moment.tz(result.input, result.inputFormat, result.inTz);
         }else if(result.input){
             var t = moment(result.input, result.inputFormat);
         }
         
-        //TODO: change to UTC+ServerConfig Loading
-        var timezone = 'Europe/Berlin';
+        //load options
+        var timezone = 'UTC';
+        var format = 'LLL';
+        var locale = 'en';
+        if(options.timezone) timezone = options.timezone; 
+        if(options.format) format = options.format;
+        if(options.locale) locale = options.locale;
+        
+        
         if(result.to){
             timezone = result.to;
         }
@@ -103,24 +118,17 @@ function handleMoment(result: Command, message: Discord.Message):void{
         }
         
         if(result.save){
-            //TODO
+            //TODO: Add limit of saved moments
+            if(message.guild){
+                guildStorage.writeMoment(message.guild.id, result.save, t.valueOf());
+            }
         }
         
         if(result.print){
-            message.channel.send(t.locale(getLocale(message)).tz(timezone).format(result.print));
+            message.channel.send(t.locale(locale).tz(timezone).format(result.print));
         } 
     } catch(error) {
-        //TODO: Error handling
         logger.warn(error.message);
     }
-}
-
-function getLocale(message: Discord.Message):string{
-    //TODO: ServerConfig
-    //TODO: UserConfig
-    if(message.author.locale){
-        return message.author.locale;
-    }
-    return 'en';
 }
 
