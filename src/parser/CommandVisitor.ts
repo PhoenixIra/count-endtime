@@ -10,6 +10,8 @@ import { OutputSaveContext } from "./CommandParser";
 import { OutputPrintContext } from "./CommandParser";
 import { OutputPrintTitleContext } from "./CommandParser";
 import { ServerLocaleContext } from "./CommandParser";
+import { ServerTimezoneContext } from "./CommandParser";
+import { ServerFormatContext } from "./CommandParser";
 import { CommandServerContext } from "./CommandParser";
 import { CommandMomentContext } from "./CommandParser";
 import { MomentNowContext } from "./CommandParser";
@@ -85,6 +87,22 @@ export interface CommandVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitServerLocale?: (ctx: ServerLocaleContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by the `ServerTimezone`
+	 * labeled alternative in `CommandParser.server`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitServerTimezone?: (ctx: ServerTimezoneContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by the `ServerFormat`
+	 * labeled alternative in `CommandParser.server`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitServerFormat?: (ctx: ServerFormatContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by the `CommandServer`

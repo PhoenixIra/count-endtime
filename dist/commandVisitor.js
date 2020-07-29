@@ -28,6 +28,14 @@ class StandardCommandVisitor extends AbstractParseTreeVisitor_1.AbstractParseTre
     visitServerLocale(context) {
         return { locale: context.STRING().text };
     }
+    //Command to change the locale of this server
+    visitServerTimezone(context) {
+        return { timezone: context.STRING().text };
+    }
+    //Command to change the locale of this server
+    visitServerFormat(context) {
+        return { format: context.QUOTESTRING().text };
+    }
     //Command to generate the current moment
     visitMomentNow(context) {
         return { now: true };

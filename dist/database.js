@@ -23,16 +23,16 @@ class GuildStorage {
     writeGuildOption(guildId, options) {
         assert(this.isOpen, "Database was not open!");
         let stmt = this.db.prepare("REPLACE INTO guild (id, locale, format, timezone) VALUES (%, %, %);");
-        stmt.run(guildId, options.locale, options.defaultFormat, options.timezone);
+        stmt.run(guildId, options.locale, options.format, options.timezone);
     }
     readGuildOption(guildId) {
         assert(this.isOpen, "Database was not open!");
         let stmt = this.db.prepare("SELECT (id, locale, format) FROM guild WHERE id = %;");
         let row = stmt.get(guildId);
         if (!row)
-            return { locale: undefined, defaultFormat: undefined, timezone: undefined };
+            return { locale: undefined, format: undefined, timezone: undefined };
         else
-            return { locale: row.locale, defaultFormat: row.format, timezone: row.timezone };
+            return { locale: row.locale, format: row.format, timezone: row.timezone };
     }
     removeGuildOption(guildId) {
         assert(this.isOpen, "Database was not open!");
@@ -63,24 +63,24 @@ class GuildStorage {
         let stmt = this.db.prepare("DELETE FROM moments WHERE guild_id = % AND moment_id = %;");
         stmt.run(guildId, momentId);
     }
-    writeCountdown(guildId, messageId, momentId, format) {
+    writeCountdown(guildId, messageId, momentId, format, locale, timezone) {
         assert(this.isOpen, "Database was not open!");
-        let stmt = this.db.prepare("REPLACE INTO countdowns (guild_id, message_id, moment_id, format) VALUES (%, %, %, %);");
+        let stmt = this.db.prepare("REPLACE INTO countdowns (guild_id, message_id, moment_id, format, locale, timezone) VALUES (%, %, %, %, %, %);");
         stmt.run(guildId, messageId, momentId, format);
     }
     readCountdown(messageId) {
         assert(this.isOpen, "Database was not open!");
-        let stmt = this.db.prepare("SELECT (guild_id, moment_id, format) FROM moments WHERE message_id = %;");
+        let stmt = this.db.prepare("SELECT (guild_id, moment_id, format, locale, timezone) FROM moments WHERE message_id = %;");
         let row = stmt.get(messageId);
         if (row)
-            return { guildId: row.guild_id, messageId: messageId, momentId: row.messageId, format: row.format };
+            return { guildId: row.guild_id, messageId: messageId, momentId: row.messageId, format: row.format, locale: row.locale, timezone: row.timezone };
         else
             return undefined;
     }
     listCountdown(guildId) {
         assert(this.isOpen, "Database was not open!");
         let stmt = this.db.prepare("SELECT (message_id, moment_id, format) FROM moments WHERE guild_id = %;");
-        return stmt.all(guildId).map(function ({ message_id: message, moment_id: moment, format: format }) { return { guildId: guildId, messageId: message, momentId: moment, format: format }; });
+        return stmt.all(guildId).map(function ({ message_id: message, moment_id: moment, format: format, locale: locale, timezone: timezone }) { return { guildId: guildId, messageId: message, momentId: moment, format: format, locale: locale, timezone: timezone }; });
     }
     removeCountdown(messageId) {
         assert(this.isOpen, "Database was not open!");

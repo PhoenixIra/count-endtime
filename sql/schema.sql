@@ -5,6 +5,8 @@ CREATE TABLE IF NOT EXISTS "countdowns" (
 	"moment_id"	TEXT NOT NULL,
 	"message_id"	INTEGER NOT NULL,
 	"format"	TEXT,
+	"locale"	TEXT,
+	"timezone"	TEXT,
 	PRIMARY KEY("message_id"),
 	FOREIGN KEY("guild_id") REFERENCES "guild"("id")
 );

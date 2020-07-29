@@ -10,6 +10,8 @@ import { OutputSaveContext } from "./CommandParser";
 import { OutputPrintContext } from "./CommandParser";
 import { OutputPrintTitleContext } from "./CommandParser";
 import { ServerLocaleContext } from "./CommandParser";
+import { ServerTimezoneContext } from "./CommandParser";
+import { ServerFormatContext } from "./CommandParser";
 import { CommandServerContext } from "./CommandParser";
 import { CommandMomentContext } from "./CommandParser";
 import { MomentNowContext } from "./CommandParser";
@@ -117,6 +119,32 @@ export interface CommandListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitServerLocale?: (ctx: ServerLocaleContext) => void;
+
+	/**
+	 * Enter a parse tree produced by the `ServerTimezone`
+	 * labeled alternative in `CommandParser.server`.
+	 * @param ctx the parse tree
+	 */
+	enterServerTimezone?: (ctx: ServerTimezoneContext) => void;
+	/**
+	 * Exit a parse tree produced by the `ServerTimezone`
+	 * labeled alternative in `CommandParser.server`.
+	 * @param ctx the parse tree
+	 */
+	exitServerTimezone?: (ctx: ServerTimezoneContext) => void;
+
+	/**
+	 * Enter a parse tree produced by the `ServerFormat`
+	 * labeled alternative in `CommandParser.server`.
+	 * @param ctx the parse tree
+	 */
+	enterServerFormat?: (ctx: ServerFormatContext) => void;
+	/**
+	 * Exit a parse tree produced by the `ServerFormat`
+	 * labeled alternative in `CommandParser.server`.
+	 * @param ctx the parse tree
+	 */
+	exitServerFormat?: (ctx: ServerFormatContext) => void;
 
 	/**
 	 * Enter a parse tree produced by the `CommandServer`
