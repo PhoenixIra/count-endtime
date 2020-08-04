@@ -1,17 +1,19 @@
 import * as Discord from 'discord.js';
 import * as moment from 'moment-timezone';
+import * as logger from 'winston';
+
 import * as auth from '../json/auth.json';
+
 import { UtilEndtime } from './util';
 import { ANTLRInputStream, CommonTokenStream, BailErrorStrategy } from 'antlr4ts';
 import { CommandLexer } from './parser/CommandLexer.js';
 import { CommandParser, CommandContext } from './parser/CommandParser.js';
 import { StandardCommandVisitor, Command, CommandType} from './commandVisitor';
 import { GuildStorage, GuildOption, MomentEpoch, Countdown } from './database';
+
 import yargs = require('yargs');
 const iso6391 = require('iso-639-1');
-import * as logger from 'winston';
-
-var guildStorage = new GuildStorage("guild_storage.db");
+const appRoot = require('app-root-path');
 
 //commandline arguments
 const argv = yargs.options({
@@ -31,6 +33,11 @@ logger.add(new logger.transports.File({ filename: 'count-endime.log',
        
 module.exports = logger;
 
+console.log(appRoot + "/dist/guild_storage.db");
+
+var guildStorage = new GuildStorage(appRoot + "/dist/guild_storage.db");
+if(guildStorage.error) logger.error(guildStorage.error.message);
+
 
 // Initialize Discord Bot
 var bot = new Discord.Client();
@@ -44,8 +51,6 @@ function onReady():void {
     logger.info('Logged in as: ');
     logger.info(bot.user.username + ' - (' + bot.user.id + ')');
     logger.info('The console is logging on '+argv.loglevel+' level');
-    if(guildStorage.error)
-        logger.error('Database error: ' + guildStorage.error.message);
 }
 
 function onMessage(message: Discord.Message):void {

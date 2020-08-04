@@ -5,8 +5,10 @@
   "main": "bot.js",
   "author": "Ira Fesefeldt",
   "dependencies": {
+    "@types/app-root-path": "^1.2.4",
     "@types/better-sqlite3": "^5.4.0",
     "antlr4ts": "^0.5.0-alpha.3",
+    "app-root-path": "^3.0.0",
     "better-sqlite3": "^7.1.0",
     "discord.js": "^12.2.0",
     "gulp-cli": "^2.3.0",

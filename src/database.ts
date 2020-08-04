@@ -36,7 +36,7 @@ export class GuildStorage {
             this.db = new sqlite3(databasefile, {fileMustExist: true});
             this._isOpen = true;
         } catch(err) {
-            this.db.close();
+            if(this.db) this.db.close();
             this._isOpen = false;
             this._error = err;
         }
