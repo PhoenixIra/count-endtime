@@ -127,6 +127,9 @@ function handleMoment(result: Command, message: Discord.Message):void{
         if(options.defFormat) printFormat = UtilEndtime.transformToFormat(options.defFormat);
         if(result.printFormat) printFormat = UtilEndtime.transformToFormat(result.printFormat);
         
+        var printTitleFormat = 'LLL';
+        if(options.defFormat) printTitleFormat = UtilEndtime.transformToFormat(options.defFormat);
+        if(result.printTitleFormat) printTitleFormat = UtilEndtime.transformToFormat(result.printTitleFormat);
         
         if(result.to){
             timezone = result.to;
@@ -150,6 +153,14 @@ function handleMoment(result: Command, message: Discord.Message):void{
         if(result.print){
             message.channel.send(t.locale(locale).tz(timezone).format(printFormat));
         } 
+        
+        if(result.printTitle){
+            if(message.guild){
+                (<Discord.GuildChannel>message.channel).setTopic(t.locale(locale).tz(timezone).format(printTitleFormat));
+            } else {
+                message.channel.send("I don't appear to be on a server?");
+            }
+        }
     } catch(error) {
         logger.warn(error.message);
     }

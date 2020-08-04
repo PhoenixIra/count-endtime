@@ -11,6 +11,13 @@ server
       | '.format ' QUOTESTRING #ServerFormat
       ; 
       
+message
+      : '.message ' QUOTESTRING         #MessagePrint
+      | '.title ' QUOTESTRING           #MessageTitle
+      | '.countdown ' QUOTESTRING       #MessageCountdown
+      | '.countdownTitle ' QUOTESTRING  #MessageCountdownTitle
+      ;
+      
 moment
       : '.now'                                                       #MomentNow
       | '.load ' STRING                                              #MomentLoad

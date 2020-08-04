@@ -121,6 +121,11 @@ function handleMoment(result, message) {
             printFormat = util_1.UtilEndtime.transformToFormat(options.defFormat);
         if (result.printFormat)
             printFormat = util_1.UtilEndtime.transformToFormat(result.printFormat);
+        var printTitleFormat = 'LLL';
+        if (options.defFormat)
+            printTitleFormat = util_1.UtilEndtime.transformToFormat(options.defFormat);
+        if (result.printTitleFormat)
+            printTitleFormat = util_1.UtilEndtime.transformToFormat(result.printTitleFormat);
         if (result.to) {
             timezone = result.to;
         }
@@ -138,6 +143,14 @@ function handleMoment(result, message) {
         }
         if (result.print) {
             message.channel.send(t.locale(locale).tz(timezone).format(printFormat));
+        }
+        if (result.printTitle) {
+            if (message.guild) {
+                message.channel.setTopic(t.locale(locale).tz(timezone).format(printTitleFormat));
+            }
+            else {
+                message.channel.send("I don't appear to be on a server?");
+            }
         }
     }
     catch (error) {
