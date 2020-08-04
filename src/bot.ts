@@ -18,7 +18,7 @@ const argv = yargs.options({
     loglevel: {
         alias: 'l',
         type: 'string',
-        default: 'error',
+        default: 'info',
         description: 'Sets the log-level for the command line'
     }
 }).parse();
@@ -27,7 +27,7 @@ const argv = yargs.options({
 logger.remove(logger.transports.Console);
 logger.add(new logger.transports.Console({ level: argv.loglevel }));
 logger.add(new logger.transports.File({ filename: 'count-endime.log',
-                                        level: 'info' }));
+                                        level: 'notice' }));
        
 module.exports = logger;
 
