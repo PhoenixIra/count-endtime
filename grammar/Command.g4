@@ -6,8 +6,8 @@ command
       ;
       
 server
-      : '.locale ' STRING 	#ServerLocale
-      | '.timezone ' STRING 	#ServerTimezone
+      : '.locale ' STRING      #ServerLocale
+      | '.timezone ' STRING    #ServerTimezone
       | '.format ' QUOTESTRING #ServerFormat
       ; 
       

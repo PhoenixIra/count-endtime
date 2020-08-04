@@ -1,20 +1,36 @@
 import * as Discord from 'discord.js';
-import * as logger from 'winston';
 import * as moment from 'moment-timezone';
 import * as auth from '../json/auth.json';
+import { UtilEndtime } from './util';
 import { ANTLRInputStream, CommonTokenStream, BailErrorStrategy } from 'antlr4ts';
 import { CommandLexer } from './parser/CommandLexer.js';
 import { CommandParser, CommandContext } from './parser/CommandParser.js';
 import { StandardCommandVisitor, Command, CommandType} from './commandVisitor';
 import { GuildStorage, GuildOption, MomentEpoch, Countdown } from './database';
+import yargs = require('yargs');
 const iso6391 = require('iso-639-1');
+import * as logger from 'winston';
 
 var guildStorage = new GuildStorage("guild_storage.db");
 
+//commandline arguments
+const argv = yargs.options({
+    loglevel: {
+        alias: 'l',
+        type: 'string',
+        default: 'error',
+        description: 'Sets the log-level for the command line'
+    }
+}).parse();
 
 // Configure logger settings
 logger.remove(logger.transports.Console);
-logger.add(new logger.transports.Console());
+logger.add(new logger.transports.Console({ level: argv.loglevel }));
+logger.add(new logger.transports.File({ filename: 'count-endime.log',
+                                        level: 'info' }));
+       
+module.exports = logger;
+
 
 // Initialize Discord Bot
 var bot = new Discord.Client();
@@ -27,8 +43,9 @@ function onReady():void {
     logger.info('Connected');
     logger.info('Logged in as: ');
     logger.info(bot.user.username + ' - (' + bot.user.id + ')');
+    logger.info('The console is logging on '+argv.loglevel+' level');
     if(guildStorage.error)
-    	logger.error('Database error: ' + guildStorage.error.message);
+        logger.error('Database error: ' + guildStorage.error.message);
 }
 
 function onMessage(message: Discord.Message):void {
@@ -65,23 +82,26 @@ function onMessage(message: Discord.Message):void {
 }
 
 function handleServer(result: Command, message: Discord.Message):void{
-    if(!message.guild) return; //TODO: Error message
+    if(!message.guild){
+        message.channel.send("I don't appear to be on a server?");
+        return;
+    }
     var guild = message.guild;
     
-    var options: GuildOption = {locale: undefined, format: undefined, timezone: undefined};
-    if(result.locale && iso6391.validate(result.locale))
-    	options.locale = result.locale;
-    if(result.format)
-        options.format = result.format;
-    if(result.timezone && moment().tz(result.timezone).isValid())
-        options.timezone = result.timezone;
-        
-    guildStorage.writeGuildOption(guild.id, options);
+    if(result.locale && iso6391.validate(result.locale)){
+        guildStorage.writeGuildLocale(guild.id, result.locale);
+    }
+    if(result.format){
+        guildStorage.writeGuildFormat(guild.id, result.format);
+    }
+    if(result.timezone && moment().tz(result.timezone).isValid()){
+        guildStorage.writeGuildTimezone(guild.id, result.timezone);
+    }
 }
 
 function handleMoment(result: Command, message: Discord.Message):void{
     //try to catch standard options
-    var options: GuildOption = {locale: undefined, format: undefined, timezone: undefined};
+    var options: GuildOption = {locale: undefined, defFormat: undefined, timezone: undefined};
     if(message.guild) options = guildStorage.readGuildOption(message.guild.id);
     
     try{
@@ -97,12 +117,15 @@ function handleMoment(result: Command, message: Discord.Message):void{
         }
         
         //load options
-        var timezone = 'UTC';
-        var format = 'LLL';
         var locale = 'en';
-        if(options.timezone) timezone = options.timezone; 
-        if(options.format) format = options.format;
         if(options.locale) locale = options.locale;
+        
+        var timezone = 'UTC';
+        if(options.timezone) timezone = options.timezone; 
+        
+        var printFormat = 'LLL';
+        if(options.defFormat) printFormat = UtilEndtime.transformToFormat(options.defFormat);
+        if(result.printFormat) printFormat = UtilEndtime.transformToFormat(result.printFormat);
         
         
         if(result.to){
@@ -125,7 +148,7 @@ function handleMoment(result: Command, message: Discord.Message):void{
         }
         
         if(result.print){
-            message.channel.send(t.locale(locale).tz(timezone).format(result.print));
+            message.channel.send(t.locale(locale).tz(timezone).format(printFormat));
         } 
     } catch(error) {
         logger.warn(error.message);

@@ -1,19 +1,33 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Discord = require("discord.js");
-const logger = require("winston");
 const moment = require("moment-timezone");
 const auth = require("../json/auth.json");
+const util_1 = require("./util");
 const antlr4ts_1 = require("antlr4ts");
 const CommandLexer_js_1 = require("./parser/CommandLexer.js");
 const CommandParser_js_1 = require("./parser/CommandParser.js");
 const commandVisitor_1 = require("./commandVisitor");
 const database_1 = require("./database");
+const yargs = require("yargs");
 const iso6391 = require('iso-639-1');
+const logger = require("winston");
 var guildStorage = new database_1.GuildStorage("guild_storage.db");
+//commandline arguments
+const argv = yargs.options({
+    loglevel: {
+        alias: 'l',
+        type: 'string',
+        default: 'error',
+        description: 'Sets the log-level for the command line'
+    }
+}).parse();
 // Configure logger settings
 logger.remove(logger.transports.Console);
-logger.add(new logger.transports.Console());
+logger.add(new logger.transports.Console({ level: argv.loglevel }));
+logger.add(new logger.transports.File({ filename: 'count-endime.log',
+    level: 'info' }));
+module.exports = logger;
 // Initialize Discord Bot
 var bot = new Discord.Client();
 bot.on('ready', onReady);
@@ -23,6 +37,7 @@ function onReady() {
     logger.info('Connected');
     logger.info('Logged in as: ');
     logger.info(bot.user.username + ' - (' + bot.user.id + ')');
+    logger.info('The console is logging on ' + argv.loglevel + ' level');
     if (guildStorage.error)
         logger.error('Database error: ' + guildStorage.error.message);
 }
@@ -59,21 +74,24 @@ function onMessage(message) {
     }
 }
 function handleServer(result, message) {
-    if (!message.guild)
-        return; //TODO: Error message
+    if (!message.guild) {
+        message.channel.send("I don't appear to be on a server?");
+        return;
+    }
     var guild = message.guild;
-    var options = { locale: undefined, format: undefined, timezone: undefined };
-    if (result.locale && iso6391.validate(result.locale))
-        options.locale = result.locale;
-    if (result.format)
-        options.format = result.format;
-    if (result.timezone && moment().tz(result.timezone).isValid())
-        options.timezone = result.timezone;
-    guildStorage.writeGuildOption(guild.id, options);
+    if (result.locale && iso6391.validate(result.locale)) {
+        guildStorage.writeGuildLocale(guild.id, result.locale);
+    }
+    if (result.format) {
+        guildStorage.writeGuildFormat(guild.id, result.format);
+    }
+    if (result.timezone && moment().tz(result.timezone).isValid()) {
+        guildStorage.writeGuildTimezone(guild.id, result.timezone);
+    }
 }
 function handleMoment(result, message) {
     //try to catch standard options
-    var options = { locale: undefined, format: undefined, timezone: undefined };
+    var options = { locale: undefined, defFormat: undefined, timezone: undefined };
     if (message.guild)
         options = guildStorage.readGuildOption(message.guild.id);
     try {
@@ -92,15 +110,17 @@ function handleMoment(result, message) {
             var t = moment(result.input, result.inputFormat);
         }
         //load options
-        var timezone = 'UTC';
-        var format = 'LLL';
         var locale = 'en';
-        if (options.timezone)
-            timezone = options.timezone;
-        if (options.format)
-            format = options.format;
         if (options.locale)
             locale = options.locale;
+        var timezone = 'UTC';
+        if (options.timezone)
+            timezone = options.timezone;
+        var printFormat = 'LLL';
+        if (options.defFormat)
+            printFormat = util_1.UtilEndtime.transformToFormat(options.defFormat);
+        if (result.printFormat)
+            printFormat = util_1.UtilEndtime.transformToFormat(result.printFormat);
         if (result.to) {
             timezone = result.to;
         }
@@ -117,7 +137,7 @@ function handleMoment(result, message) {
             }
         }
         if (result.print) {
-            message.channel.send(t.locale(locale).tz(timezone).format(result.print));
+            message.channel.send(t.locale(locale).tz(timezone).format(printFormat));
         }
     }
     catch (error) {
