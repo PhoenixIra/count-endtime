@@ -12,6 +12,10 @@ import { OutputPrintTitleContext } from "./CommandParser";
 import { ServerLocaleContext } from "./CommandParser";
 import { ServerTimezoneContext } from "./CommandParser";
 import { ServerFormatContext } from "./CommandParser";
+import { MessagePrintContext } from "./CommandParser";
+import { MessageTitleContext } from "./CommandParser";
+import { MessageCountdownContext } from "./CommandParser";
+import { MessageCountdownTitleContext } from "./CommandParser";
 import { CommandServerContext } from "./CommandParser";
 import { CommandMomentContext } from "./CommandParser";
 import { MomentNowContext } from "./CommandParser";
@@ -20,6 +24,7 @@ import { MomentInputContext } from "./CommandParser";
 import { MomentInputWoQContext } from "./CommandParser";
 import { CommandContext } from "./CommandParser";
 import { ServerContext } from "./CommandParser";
+import { MessageContext } from "./CommandParser";
 import { MomentContext } from "./CommandParser";
 import { OutputContext } from "./CommandParser";
 
@@ -105,6 +110,38 @@ export interface CommandVisitor<Result> extends ParseTreeVisitor<Result> {
 	visitServerFormat?: (ctx: ServerFormatContext) => Result;
 
 	/**
+	 * Visit a parse tree produced by the `MessagePrint`
+	 * labeled alternative in `CommandParser.message`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitMessagePrint?: (ctx: MessagePrintContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by the `MessageTitle`
+	 * labeled alternative in `CommandParser.message`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitMessageTitle?: (ctx: MessageTitleContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by the `MessageCountdown`
+	 * labeled alternative in `CommandParser.message`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitMessageCountdown?: (ctx: MessageCountdownContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by the `MessageCountdownTitle`
+	 * labeled alternative in `CommandParser.message`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitMessageCountdownTitle?: (ctx: MessageCountdownTitleContext) => Result;
+
+	/**
 	 * Visit a parse tree produced by the `CommandServer`
 	 * labeled alternative in `CommandParser.command`.
 	 * @param ctx the parse tree
@@ -165,6 +202,13 @@ export interface CommandVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitServer?: (ctx: ServerContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `CommandParser.message`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitMessage?: (ctx: MessageContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `CommandParser.moment`.
