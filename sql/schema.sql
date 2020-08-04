@@ -1,12 +1,4 @@
 BEGIN TRANSACTION;
-DROP TABLE IF EXISTS "guild";
-CREATE TABLE IF NOT EXISTS "guild" (
-	"id"	INTEGER NOT NULL,
-	"locale"	TEXT,
-	"defFormat"	TEXT,
-	"timezone"	TEXT,
-	PRIMARY KEY("id")
-);
 DROP TABLE IF EXISTS "countdowns";
 CREATE TABLE IF NOT EXISTS "countdowns" (
 	"guild_id"	INTEGER NOT NULL,
@@ -25,5 +17,13 @@ CREATE TABLE IF NOT EXISTS "moments" (
 	"moment_epoch"	INTEGER NOT NULL,
 	PRIMARY KEY("guild_id"),
 	FOREIGN KEY("guild_id") REFERENCES "guild"("id")
+);
+DROP TABLE IF EXISTS "guild";
+CREATE TABLE IF NOT EXISTS "guild" (
+	"id"	INTEGER NOT NULL,
+	"locale"	TEXT,
+	"defFormat"	TEXT,
+	"timezone"	TEXT,
+	PRIMARY KEY("id")
 );
 COMMIT;
