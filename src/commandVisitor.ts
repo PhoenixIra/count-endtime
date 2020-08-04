@@ -2,27 +2,28 @@
 import { AbstractParseTreeVisitor } from 'antlr4ts/tree/AbstractParseTreeVisitor'
 import { CommandVisitor } from './parser/CommandVisitor'
 import * as parser from './parser/CommandParser'
-import * as logger from 'winston';
 var parseFormat = require('moment-parseformat');
 
 export enum CommandType {moment, server, help}
 
 export interface Command{
-    type?: (CommandType | undefined);
-    locale?: (string | undefined);
-    timezone?: (string | undefined);
-    format?: (string | undefined);
-    now?: (boolean | undefined);
-    load?: (string | undefined);
-    input?: (string | undefined);
-    inputFormat?: (string | undefined);
-    inTz?: (string | undefined);
-    countdownTitle?: (string | undefined);
-    countdown?: (string | undefined);
-    to?: (string | undefined);
-    save?: (string | undefined);
-    print?: (string | undefined);
-    printTitle?: (string | undefined);
+    type?: (CommandType);
+    locale?: (string);
+    timezone?: (string);
+    format?: (string);
+    now?: (boolean);
+    load?: (string);
+    input?: (string);
+    inputFormat?: (string);
+    inTz?: (string);
+    countdownTitle?: (string);
+    countdown?: (string);
+    to?: (string);
+    save?: (string);
+    print?: (boolean);
+    printFormat?: (string);
+    printTitle?: (boolean);
+    printTitleFormat?: (string);
 }
     
 
@@ -129,79 +130,21 @@ export class StandardCommandVisitor extends AbstractParseTreeVisitor<Command> im
     visitOutputPrint(context: parser.OutputPrintContext): Command {
         var outputs: Command = {};
         if(context.output()) outputs = context.output().accept(this);
-        var format: string = 'LLL';
-        if(context.QUOTESTRING()) format = this.transformToFormat(context.QUOTESTRING().text);
-        return {...outputs, print: format};
+        if(context.QUOTESTRING()){
+            return {...outputs, print: true, printFormat: context.QUOTESTRING().text};
+        } else {
+            return {...outputs, print: true};
+        }
     }
     
     //option to print the date in the title
     visitOutputPrintTitle(context: parser.OutputPrintContext): Command {
         var outputs: Command = {};
         if(context.output()) outputs = context.output().accept(this);
-        var format: string = 'LLL';
-        if(context.QUOTESTRING()) format = this.transformToFormat(context.QUOTESTRING().text);
-        return {...outputs, printTitle: format};
-    }
-    
-    //function to transform our format style to moment format style
-    transformToFormat(text: string):string {
-        /*
-         * 0: Starstate
-         * 1: quotemark
-         * 2: time format
-         * 3: text
-         * 4: end
-         */
-        var state: number = 0;
-        var output: string[] = [];
-        var index: number = 0;
-        for(let c of text){
-             switch(state){
-                 //start
-                 case 0:
-                     if(c != '"'){
-                         logger.error("Could not transform text into momentjs format. \" was missing. Text was: '"+text+"'");
-                     }
-                     state = 1;
-                     break;
-                 //quotemark
-                 case 1:
-                     if(c == '['){
-                         state = 2;
-                     }else{
-                         state = 3;
-                         output[index++]='[';
-                         output[index++]=c;
-                     }                     
-                     break;
-                 case 2:
-                     if(c == ']'){
-                         state = 3;
-                         output[index++]='[';
-                     } else if(c == '"'){
-                         state = 4;
-                     } else {
-                         state = 2;
-                         output[index++]=c;
-                     }
-                     break;
-                 case 3:
-                     if(c == '['){
-                         state = 2;
-                         output[index++]=']';
-                     } else if(c == '"'){
-                         state = 4;
-                         output[index++]=']';
-                     } else {
-                         state = 3;
-                         output[index++]=c;
-                     }
-                     break;
-                 case 4:
-                 default:
-                 break;                
-            }
+        if(context.QUOTESTRING()){
+            return {...outputs, printTitle: true, printTitleFormat: context.QUOTESTRING().text};
+        } else {
+            return {...outputs, printTitle: true};
         }
-        return output.join('');        
     }
 }

@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.StandardCommandVisitor = exports.CommandType = void 0;
 // import antlr and grammar
 const AbstractParseTreeVisitor_1 = require("antlr4ts/tree/AbstractParseTreeVisitor");
-const logger = require("winston");
 var parseFormat = require('moment-parseformat');
 var CommandType;
 (function (CommandType) {
@@ -107,86 +106,24 @@ class StandardCommandVisitor extends AbstractParseTreeVisitor_1.AbstractParseTre
         var outputs = {};
         if (context.output())
             outputs = context.output().accept(this);
-        var format = 'LLL';
-        if (context.QUOTESTRING())
-            format = this.transformToFormat(context.QUOTESTRING().text);
-        return Object.assign(Object.assign({}, outputs), { print: format });
+        if (context.QUOTESTRING()) {
+            return Object.assign(Object.assign({}, outputs), { print: true, printFormat: context.QUOTESTRING().text });
+        }
+        else {
+            return Object.assign(Object.assign({}, outputs), { print: true });
+        }
     }
     //option to print the date in the title
     visitOutputPrintTitle(context) {
         var outputs = {};
         if (context.output())
             outputs = context.output().accept(this);
-        var format = 'LLL';
-        if (context.QUOTESTRING())
-            format = this.transformToFormat(context.QUOTESTRING().text);
-        return Object.assign(Object.assign({}, outputs), { printTitle: format });
-    }
-    //function to transform our format style to moment format style
-    transformToFormat(text) {
-        /*
-         * 0: Starstate
-         * 1: quotemark
-         * 2: time format
-         * 3: text
-         * 4: end
-         */
-        var state = 0;
-        var output = [];
-        var index = 0;
-        for (let c of text) {
-            switch (state) {
-                //start
-                case 0:
-                    if (c != '"') {
-                        logger.error("Could not transform text into momentjs format. \" was missing. Text was: '" + text + "'");
-                    }
-                    state = 1;
-                    break;
-                //quotemark
-                case 1:
-                    if (c == '[') {
-                        state = 2;
-                    }
-                    else {
-                        state = 3;
-                        output[index++] = '[';
-                        output[index++] = c;
-                    }
-                    break;
-                case 2:
-                    if (c == ']') {
-                        state = 3;
-                        output[index++] = '[';
-                    }
-                    else if (c == '"') {
-                        state = 4;
-                    }
-                    else {
-                        state = 2;
-                        output[index++] = c;
-                    }
-                    break;
-                case 3:
-                    if (c == '[') {
-                        state = 2;
-                        output[index++] = ']';
-                    }
-                    else if (c == '"') {
-                        state = 4;
-                        output[index++] = ']';
-                    }
-                    else {
-                        state = 3;
-                        output[index++] = c;
-                    }
-                    break;
-                case 4:
-                default:
-                    break;
-            }
+        if (context.QUOTESTRING()) {
+            return Object.assign(Object.assign({}, outputs), { printTitle: true, printTitleFormat: context.QUOTESTRING().text });
         }
-        return output.join('');
+        else {
+            return Object.assign(Object.assign({}, outputs), { printTitle: true });
+        }
     }
 }
 exports.StandardCommandVisitor = StandardCommandVisitor;
