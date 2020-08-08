@@ -32,7 +32,7 @@ You are very welcome to contribute to this project. Currently I work alone on it
 ## License
 MIT License
 
-Copyright (c) [2020] [Ira Fesefeldt]
+Copyright (c) 2020 Ira Fesefeldt
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
