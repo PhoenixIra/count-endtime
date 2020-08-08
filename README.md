@@ -24,7 +24,7 @@ npm run gulp install
 Remark, the default gulp script does not build you an sqlite3 database, which you require to save and load moments. Possible gulp tasks are: `install, default, build, sqlite`. `default` and `build` are synonymous, `install` will execute `build` and `sqlite` in parallel.
 
 ## How to set up
-To set up, you need to rename the file `json/config-template.json` into `json/config.json`. You also require a bot token from discord. You can find instruction to get these [https://discordjs.guide/preparations/setting-up-a-bot-application.html#your-token here].
+To set up, you need to rename the file `json/config-template.json` into `json/config.json`. You also require a bot token from discord. You can find instruction to get these [here](https://discordjs.guide/preparations/setting-up-a-bot-application.html#your-token).
 
 ## How to contribute
 You are very welcome to contribute to this project. Currently I work alone on it. Feel free to fork the project, add issues which you want to tackle and submit pull requests. We don't have strict code styles yet.
