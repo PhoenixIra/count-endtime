@@ -4,26 +4,31 @@ import { CommandVisitor } from './parser/CommandVisitor'
 import * as parser from './parser/CommandParser'
 var parseFormat = require('moment-parseformat');
 
-export enum CommandType {moment, server, help}
+export enum CommandType {moment, server, help, message}
 
 export interface Command{
     type?: (CommandType);
+    
     locale?: (string);
     timezone?: (string);
     format?: (string);
+    deleteMoment?: (string);
+    
     now?: (boolean);
     load?: (string);
     input?: (string);
     inputFormat?: (string);
     inTz?: (string);
-    countdownTitle?: (string);
-    countdown?: (string);
+    
     to?: (string);
     save?: (string);
     print?: (boolean);
     printFormat?: (string);
     printTitle?: (boolean);
     printTitleFormat?: (string);
+    
+    printMessage?: (string);
+    titleMessage?: (string);
 }
     
 
@@ -43,6 +48,16 @@ export class StandardCommandVisitor extends AbstractParseTreeVisitor<Command> im
         return {type: CommandType.moment, ...context.moment().accept(this), ...context.output().accept(this)};
     }
     
+    //Commands affecting a message to print
+    visitCommandMessage(context: parser.CommandMessageContext): Command {
+    	return {type: CommandType.message, ...context.message().accept(this)}
+    }
+    
+    //Commands affecting a help message
+    visitCommandHelp(context: parser.CommandHelpContext): Command {
+    	return {type: CommandType.help}
+    }
+    
     //Command to change the locale of this server
     visitServerLocale(context: parser.ServerLocaleContext): Command {
         return {locale: context.STRING().text};
@@ -56,6 +71,21 @@ export class StandardCommandVisitor extends AbstractParseTreeVisitor<Command> im
     //Command to change the locale of this server
     visitServerFormat(context: parser.ServerFormatContext): Command {
         return {format: context.QUOTESTRING().text};
+    }
+    
+    //Command to change the locale of this server
+    visitServerDeleteMoment(context: parser.ServerDeleteMomentContext): Command {
+        return {deleteMoment: context.STRING().text};
+    }
+    
+    //Command to print a nice message with times and countdowns
+    visitMessagePrint(context: parser.MessagePrintContext): Command {
+    	return {printMessage: context.QUOTESTRING().text};
+    }
+    
+    //Command to print a nice message with times and countdowns
+    visitMessageTitle(context: parser.MessageTitleContext): Command {
+    	return {titleMessage: context.QUOTESTRING().text};
     }
 
     //Command to generate the current moment
@@ -96,20 +126,6 @@ export class StandardCommandVisitor extends AbstractParseTreeVisitor<Command> im
         }
         command.input = context.STRING(0).text;
         return command;        
-    }
-    
-    //option to make a countdown in the title
-    visitOutputCountdownTitle(context: parser.OutputCountdownTitleContext): Command {
-        var outputs: Command = {};
-        if(context.output()) var outputs = context.output().accept(this) 
-        return {...outputs, countdownTitle: context.STRING().text}
-    }
-    
-    //option to make a countdown in the chat
-    visitOutputCountdown(context: parser.OutputCountdownContext): Command {
-        var outputs: Command = {};
-        if(context.output()) var outputs = context.output().accept(this) 
-        return {...outputs, countdown: context.STRING().text}
     }
     
     //option to set the timezone

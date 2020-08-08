@@ -2,7 +2,7 @@ import * as Discord from 'discord.js';
 import * as moment from 'moment-timezone';
 import * as logger from 'winston';
 
-import * as auth from '../json/auth.json';
+import * as config from '../json/config.json';
 
 import { UtilEndtime } from './util';
 import { ANTLRInputStream, CommonTokenStream, BailErrorStrategy } from 'antlr4ts';
@@ -43,7 +43,7 @@ if(guildStorage.error) logger.error(guildStorage.error.message);
 var bot = new Discord.Client();
 bot.on('ready', onReady);
 bot.on('message', onMessage);
-bot.login(auth.token);
+bot.login(config.token);
 
 
 function onReady():void {
@@ -54,10 +54,11 @@ function onReady():void {
 }
 
 function onMessage(message: Discord.Message):void {
-    if(message.cleanContent.substring(0,1) != '.') return; 
+    if(message.cleanContent.substring(0,1) != config.cmdSymbol) return; //only react to command symbol 
+    if(message.cleanContent.substring(1,2) == config.cmdSymbol) return; //ignore double command symbols
     try{
         // Create the lexer
-        let inputStream = new ANTLRInputStream(message.cleanContent);
+        let inputStream = new ANTLRInputStream(message.cleanContent.substring(1));
         let lexer = new CommandLexer(inputStream);
         //We dont need debug output
         lexer.removeErrorListeners();
@@ -72,11 +73,17 @@ function onMessage(message: Discord.Message):void {
         let result = tree.accept(new StandardCommandVisitor());
         
         switch(result.type){
+            case CommandType.help:
+                handleHelp(result,message);
+                break;
             case CommandType.server:
                 handleServer(result,message);
                 break;
             case CommandType.moment:
                 handleMoment(result,message);
+                break;
+            case CommandType.message:
+                handleMessage(result,message);
                 break;
             default:
                 message.channel.send("No.");
@@ -84,6 +91,10 @@ function onMessage(message: Discord.Message):void {
     } catch(error){
         logger.warn(error.message);
     }
+}
+
+function handleHelp(result: Command, message: Discord.Message):void{
+
 }
 
 function handleServer(result: Command, message: Discord.Message):void{
@@ -102,72 +113,95 @@ function handleServer(result: Command, message: Discord.Message):void{
     if(result.timezone && moment().tz(result.timezone).isValid()){
         guildStorage.writeGuildTimezone(guild.id, result.timezone);
     }
+    if(result.deleteMoment){
+        guildStorage.removeMoment(guild.id, result.deleteMoment);
+    }
 }
 
-function handleMoment(result: Command, message: Discord.Message):void{
-    //try to catch standard options
-    var options: GuildOption = {locale: undefined, defFormat: undefined, timezone: undefined};
-    if(message.guild) options = guildStorage.readGuildOption(message.guild.id);
-    
+
+function handleMoment(result: Command, message: Discord.Message):void{    
     try{
         //get the moment saved in t
-        if(result.now){
-            var t = moment();
-        }else if(result.load){
-            if(message.guild) var t = moment(guildStorage.readMoment(message.guild.id, result.load).momentEpoch);
-        }else if(result.input && result.inTz){
-            var t = moment.tz(result.input, result.inputFormat, result.inTz);
-        }else if(result.input){
-            var t = moment(result.input, result.inputFormat);
-        }
+        var t = inputMoment(result, message);
         
-        //load options
-        var locale = 'en';
-        if(options.locale) locale = options.locale;
-        
-        var timezone = 'UTC';
-        if(options.timezone) timezone = options.timezone; 
-        
-        var printFormat = 'LLL';
-        if(options.defFormat) printFormat = UtilEndtime.transformToFormat(options.defFormat);
-        if(result.printFormat) printFormat = UtilEndtime.transformToFormat(result.printFormat);
-        
-        var printTitleFormat = 'LLL';
-        if(options.defFormat) printTitleFormat = UtilEndtime.transformToFormat(options.defFormat);
-        if(result.printTitleFormat) printTitleFormat = UtilEndtime.transformToFormat(result.printTitleFormat);
-        
-        if(result.to){
-            timezone = result.to;
-        }
-        
-        if(result.countdownTitle){
-            //TODO
-        }
-        
-        if(result.countdown){
-            //TODO
-        }
-        
-        if(result.save){
-            //TODO: Add limit of saved moments
-            if(message.guild){
-                guildStorage.writeMoment(message.guild.id, result.save, t.valueOf());
-            }
-        }
-        
-        if(result.print){
-            message.channel.send(t.locale(locale).tz(timezone).format(printFormat));
-        } 
-        
-        if(result.printTitle){
-            if(message.guild){
-                (<Discord.GuildChannel>message.channel).setTopic(t.locale(locale).tz(timezone).format(printTitleFormat));
-            } else {
-                message.channel.send("I don't appear to be on a server?");
-            }
-        }
+        //output the moment on the desired channel.
+        outputMoment(t, result, message);
     } catch(error) {
         logger.warn(error.message);
     }
 }
 
+function inputMoment(result: Command, message: Discord.Message):moment.Moment{
+    if(result.now){
+        return moment();
+    }else if(result.load && message.guild){
+        return moment(guildStorage.readMoment(message.guild.id, result.load).momentEpoch);
+    }else if(result.input && result.inTz){
+        return moment.tz(result.input, result.inputFormat, result.inTz);
+    }else if(result.input){
+        return moment(result.input, result.inputFormat);
+    }
+    return moment();
+}
+
+function outputMoment(t: moment.Moment, result: Command, message: Discord.Message):void {
+
+    //try to catch standard options
+    var options: GuildOption = {locale: undefined, defFormat: undefined, timezone: undefined};
+    if(message.guild) options = guildStorage.readGuildOption(message.guild.id);
+
+    //load options
+    var locale = 'en';
+    if(options.locale) locale = options.locale;
+    
+    var timezone = 'UTC';
+    if(options.timezone) timezone = options.timezone; 
+    
+    var printFormat = 'LLL';
+    if(options.defFormat) printFormat = UtilEndtime.transformToFormat(options.defFormat);
+    if(result.printFormat) printFormat = UtilEndtime.transformToFormat(result.printFormat);
+    
+    var printTitleFormat = 'LLL';
+    if(options.defFormat) printTitleFormat = UtilEndtime.transformToFormat(options.defFormat);
+    if(result.printTitleFormat) printTitleFormat = UtilEndtime.transformToFormat(result.printTitleFormat);
+    
+    var alertNotServer = false;
+    
+    if(result.to){
+        timezone = result.to;
+    }
+    
+    if(result.save){
+        if(message.guild){
+            if(guildStorage.listMoment(message.guild.id).length <= config.maxMomentsPerGuild){
+                guildStorage.writeMoment(message.guild.id, result.save, t.valueOf());
+            } else {
+                message.channel.send("This Server can not have more Moments.");
+            }
+        } else {
+            alertNotServer = true;
+        }
+    }
+    
+    if(result.print){
+        message.channel.send(t.locale(locale).tz(timezone).format(printFormat));
+    } 
+    
+    if(result.printTitle){
+        if(message.guild){
+            (<Discord.GuildChannel>message.channel).setTopic(t.locale(locale).tz(timezone).format(printTitleFormat));
+        } else {
+            alertNotServer = true;
+        }
+    }
+    
+    if(alertNotServer){
+        message.channel.send("I don't appear to be on a server?");
+    }
+}
+
+
+function handleMessage(result: Command, message: Discord.Message):void{
+
+
+}

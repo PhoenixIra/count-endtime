@@ -3,8 +3,6 @@
 
 import { ParseTreeListener } from "antlr4ts/tree/ParseTreeListener";
 
-import { OutputCountdownTitleContext } from "./CommandParser";
-import { OutputCountdownContext } from "./CommandParser";
 import { OutputToContext } from "./CommandParser";
 import { OutputSaveContext } from "./CommandParser";
 import { OutputPrintContext } from "./CommandParser";
@@ -12,17 +10,19 @@ import { OutputPrintTitleContext } from "./CommandParser";
 import { ServerLocaleContext } from "./CommandParser";
 import { ServerTimezoneContext } from "./CommandParser";
 import { ServerFormatContext } from "./CommandParser";
+import { ServerDeleteMomentContext } from "./CommandParser";
 import { MessagePrintContext } from "./CommandParser";
 import { MessageTitleContext } from "./CommandParser";
-import { MessageCountdownContext } from "./CommandParser";
-import { MessageCountdownTitleContext } from "./CommandParser";
 import { CommandServerContext } from "./CommandParser";
 import { CommandMomentContext } from "./CommandParser";
+import { CommandMessageContext } from "./CommandParser";
+import { CommandHelpContext } from "./CommandParser";
 import { MomentNowContext } from "./CommandParser";
 import { MomentLoadContext } from "./CommandParser";
 import { MomentInputContext } from "./CommandParser";
 import { MomentInputWoQContext } from "./CommandParser";
 import { CommandContext } from "./CommandParser";
+import { HelpContext } from "./CommandParser";
 import { ServerContext } from "./CommandParser";
 import { MessageContext } from "./CommandParser";
 import { MomentContext } from "./CommandParser";
@@ -34,32 +34,6 @@ import { OutputContext } from "./CommandParser";
  * `CommandParser`.
  */
 export interface CommandListener extends ParseTreeListener {
-	/**
-	 * Enter a parse tree produced by the `OutputCountdownTitle`
-	 * labeled alternative in `CommandParser.output`.
-	 * @param ctx the parse tree
-	 */
-	enterOutputCountdownTitle?: (ctx: OutputCountdownTitleContext) => void;
-	/**
-	 * Exit a parse tree produced by the `OutputCountdownTitle`
-	 * labeled alternative in `CommandParser.output`.
-	 * @param ctx the parse tree
-	 */
-	exitOutputCountdownTitle?: (ctx: OutputCountdownTitleContext) => void;
-
-	/**
-	 * Enter a parse tree produced by the `OutputCountdown`
-	 * labeled alternative in `CommandParser.output`.
-	 * @param ctx the parse tree
-	 */
-	enterOutputCountdown?: (ctx: OutputCountdownContext) => void;
-	/**
-	 * Exit a parse tree produced by the `OutputCountdown`
-	 * labeled alternative in `CommandParser.output`.
-	 * @param ctx the parse tree
-	 */
-	exitOutputCountdown?: (ctx: OutputCountdownContext) => void;
-
 	/**
 	 * Enter a parse tree produced by the `OutputTo`
 	 * labeled alternative in `CommandParser.output`.
@@ -152,6 +126,19 @@ export interface CommandListener extends ParseTreeListener {
 	exitServerFormat?: (ctx: ServerFormatContext) => void;
 
 	/**
+	 * Enter a parse tree produced by the `ServerDeleteMoment`
+	 * labeled alternative in `CommandParser.server`.
+	 * @param ctx the parse tree
+	 */
+	enterServerDeleteMoment?: (ctx: ServerDeleteMomentContext) => void;
+	/**
+	 * Exit a parse tree produced by the `ServerDeleteMoment`
+	 * labeled alternative in `CommandParser.server`.
+	 * @param ctx the parse tree
+	 */
+	exitServerDeleteMoment?: (ctx: ServerDeleteMomentContext) => void;
+
+	/**
 	 * Enter a parse tree produced by the `MessagePrint`
 	 * labeled alternative in `CommandParser.message`.
 	 * @param ctx the parse tree
@@ -178,32 +165,6 @@ export interface CommandListener extends ParseTreeListener {
 	exitMessageTitle?: (ctx: MessageTitleContext) => void;
 
 	/**
-	 * Enter a parse tree produced by the `MessageCountdown`
-	 * labeled alternative in `CommandParser.message`.
-	 * @param ctx the parse tree
-	 */
-	enterMessageCountdown?: (ctx: MessageCountdownContext) => void;
-	/**
-	 * Exit a parse tree produced by the `MessageCountdown`
-	 * labeled alternative in `CommandParser.message`.
-	 * @param ctx the parse tree
-	 */
-	exitMessageCountdown?: (ctx: MessageCountdownContext) => void;
-
-	/**
-	 * Enter a parse tree produced by the `MessageCountdownTitle`
-	 * labeled alternative in `CommandParser.message`.
-	 * @param ctx the parse tree
-	 */
-	enterMessageCountdownTitle?: (ctx: MessageCountdownTitleContext) => void;
-	/**
-	 * Exit a parse tree produced by the `MessageCountdownTitle`
-	 * labeled alternative in `CommandParser.message`.
-	 * @param ctx the parse tree
-	 */
-	exitMessageCountdownTitle?: (ctx: MessageCountdownTitleContext) => void;
-
-	/**
 	 * Enter a parse tree produced by the `CommandServer`
 	 * labeled alternative in `CommandParser.command`.
 	 * @param ctx the parse tree
@@ -228,6 +189,32 @@ export interface CommandListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitCommandMoment?: (ctx: CommandMomentContext) => void;
+
+	/**
+	 * Enter a parse tree produced by the `CommandMessage`
+	 * labeled alternative in `CommandParser.command`.
+	 * @param ctx the parse tree
+	 */
+	enterCommandMessage?: (ctx: CommandMessageContext) => void;
+	/**
+	 * Exit a parse tree produced by the `CommandMessage`
+	 * labeled alternative in `CommandParser.command`.
+	 * @param ctx the parse tree
+	 */
+	exitCommandMessage?: (ctx: CommandMessageContext) => void;
+
+	/**
+	 * Enter a parse tree produced by the `CommandHelp`
+	 * labeled alternative in `CommandParser.command`.
+	 * @param ctx the parse tree
+	 */
+	enterCommandHelp?: (ctx: CommandHelpContext) => void;
+	/**
+	 * Exit a parse tree produced by the `CommandHelp`
+	 * labeled alternative in `CommandParser.command`.
+	 * @param ctx the parse tree
+	 */
+	exitCommandHelp?: (ctx: CommandHelpContext) => void;
 
 	/**
 	 * Enter a parse tree produced by the `MomentNow`
@@ -291,6 +278,17 @@ export interface CommandListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitCommand?: (ctx: CommandContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `CommandParser.help`.
+	 * @param ctx the parse tree
+	 */
+	enterHelp?: (ctx: HelpContext) => void;
+	/**
+	 * Exit a parse tree produced by `CommandParser.help`.
+	 * @param ctx the parse tree
+	 */
+	exitHelp?: (ctx: HelpContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `CommandParser.server`.

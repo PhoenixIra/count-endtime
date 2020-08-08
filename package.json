@@ -1,6 +1,6 @@
 {
   "name": "count_endtime",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "A bot to handle with time and countdowns",
   "main": "bot.js",
   "author": "Ira Fesefeldt",
